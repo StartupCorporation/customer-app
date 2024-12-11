@@ -1,0 +1,16 @@
+[project]
+name = "customer-app"
+version = "0.0.1"
+description = "The customer microservice application."
+requires-python = ">=3.12"
+dependencies = [
+    "pydantic",
+    "sqlalchemy[asyncio]",
+    "fastapi",
+]
+
+[project.optional-dependencies]
+local = [
+    "pytest",
+    "ipython",
+]

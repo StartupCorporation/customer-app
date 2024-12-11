@@ -1,0 +1,6 @@
+.idea/
+__pycache__/
+venv/
+src/customer_app.egg-info/
+
+.env
