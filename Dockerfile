@@ -1,27 +1,26 @@
-ARG GID
-ARG UID
+ARG GROUP_ID
+ARG USER_ID
 
 FROM python:3.12 AS dependencies
-ARG GID
-ARG UID
 
 COPY requirements.txt .
-RUN pip install --user -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt --prefix=venv
 
 
 FROM python:3.12-slim AS final
 ARG APP_DIR=/app
-ARG GID
-ARG UID
+ARG GROUP_ID
+ARG USER_ID
 
-ENV PYTHONPATH="${PYTHONPATH}:${APP_DIR}"
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
 WORKDIR $APP_DIR
 
-COPY --from=dependencies /root/.local /root/.local
+COPY --from=dependencies /venv /usr/local
 COPY ./src .
 
-RUN groupadd -g $GID appgroup && \
-    useradd -u $UID -g $GID appuser
+RUN groupadd -g $GROUP_ID appgroup && \
+    useradd -u $USER_ID -g $GROUP_ID appuser
 
 USER appuser

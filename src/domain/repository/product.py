@@ -1,6 +1,8 @@
 from abc import ABC
 
-from domain import Product, ProductID, CRUDRepository
+from domain.entities.product import ProductID, Product
+from domain.repository.base import CRUDRepository
 
 
-class ProductRepository(ABC, CRUDRepository[ProductID, Product]): ...
+class ProductRepository(CRUDRepository[ProductID, Product], ABC):
+    pass

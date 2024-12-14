@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from domain import CRUDRepository
+from domain.repository.base import CRUDRepository
 
 
 class SQLAlchemyRepository(ABC):
@@ -12,7 +12,7 @@ class SQLAlchemyRepository(ABC):
 class CRUDSQLAlchemyRepository[ID, ENTITY](
     SQLAlchemyRepository,
     CRUDRepository,
-    ABC
+    ABC,
 ):
 
     async def get(self, id_: ID) -> ENTITY | None: ...
@@ -23,6 +23,6 @@ class CRUDSQLAlchemyRepository[ID, ENTITY](
 
     async def delete(self, id_: ID) -> None: ...
 
-    @abstractmethod
     @property
+    @abstractmethod
     def entity(self) -> ENTITY: ...

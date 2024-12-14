@@ -3,7 +3,8 @@ from typing import Annotated, NewType
 
 from pydantic import Field, UUID4
 
-from domain import Entity, Product
+from domain.entities.base import Entity
+from domain.entities.product import Product
 
 
 CategoryID = NewType("CategoryID", UUID4)

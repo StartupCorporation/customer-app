@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from infrastructure import Container
+from infrastructure.di.container import Container
 
 
 class Module(ABC):

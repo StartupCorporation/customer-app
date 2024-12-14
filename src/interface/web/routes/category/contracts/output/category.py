@@ -1,4 +1,4 @@
-from domain import CategoryID, CategoryType
+from domain.entities.category import CategoryID, CategoryType
 from interface.web.contracts import OutputContract
 
 

@@ -1,5 +1,7 @@
 # Customer Microservice Application
 
+## Setup
+
 ## Development
 
 ### Commits
@@ -20,10 +22,10 @@ As a result, the branch describes what it should do:
 
 ### Branches
 
-`Main` branch:
+`main` branch:
 * Contains tested and stable code.
 
 Feature branches:
-* Must be tested locally before merging into the main.
+* Must be tested locally before merging into the `main`.
 * The merge request has to be created to merge into `main`.
 * The merge commit message must describe which feature was merged into `main`.

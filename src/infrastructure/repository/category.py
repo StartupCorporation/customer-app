@@ -1,5 +1,6 @@
-from domain import Category, CategoryID, CategoryRepository
-from infrastructure import CRUDSQLAlchemyRepository
+from domain.entities.category import CategoryID, Category
+from domain.repository.category import CategoryRepository
+from infrastructure.repository.base import CRUDSQLAlchemyRepository
 
 
 class SQLAlchemyCategoryRepository(

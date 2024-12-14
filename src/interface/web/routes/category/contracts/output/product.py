@@ -1,4 +1,4 @@
-from domain import ProductID
+from domain.entities.product import ProductID
 from interface.web.contracts import OutputContract
 
 

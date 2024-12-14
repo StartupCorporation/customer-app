@@ -1,6 +1,8 @@
 from abc import ABC
 
-from domain import CRUDRepository, CategoryID, Category
+from domain.entities.category import CategoryID, Category
+from domain.repository.base import CRUDRepository
 
 
-class CategoryRepository(ABC, CRUDRepository[CategoryID, Category]): ...
+class CategoryRepository(CRUDRepository[CategoryID, Category], ABC):
+    pass

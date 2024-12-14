@@ -1,8 +1,11 @@
-from domain import CategoryRepository, ProductRepository
-from infrastructure import (
-    Module, Container, ApplicationSettings, DatabaseSettings, SQLAlchemyCategoryRepository,
-    SQLAlchemyProductRepository,
-)
+from domain.repository.category import CategoryRepository
+from domain.repository.product import ProductRepository
+from infrastructure.di.container import Container
+from infrastructure.di.module import Module
+from infrastructure.repository.category import SQLAlchemyCategoryRepository
+from infrastructure.repository.product import SQLAlchemyProductRepository
+from infrastructure.settings.application import ApplicationSettings
+from infrastructure.settings.database import DatabaseSettings
 
 
 class InfrastructureModule(Module):

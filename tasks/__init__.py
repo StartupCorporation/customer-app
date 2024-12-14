@@ -1,6 +1,7 @@
 from invoke import Collection
 
 import packages
+import infra
 
 
-namespace = Collection(packages)
+namespace = Collection(packages, infra)

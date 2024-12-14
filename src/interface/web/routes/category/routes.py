@@ -1,6 +1,6 @@
 from fastapi import APIRouter, status
 
-from domain import CategoryType
+from domain.entities.category import CategoryType
 from interface.web.routes.category.contracts.output.category import CategoryOutputContract
 from interface.web.routes.category.contracts.output.product import CategoryProductOutputContract
 

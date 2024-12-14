@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from starlette import status
 
-from domain import ProductID
+from domain.entities.product import ProductID
 from interface.web.routes.product.contracts.output.product import ProductOutputContract
 
 
