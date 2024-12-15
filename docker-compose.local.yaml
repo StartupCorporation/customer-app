@@ -1,0 +1,59 @@
+version: '3.9'
+
+x-app-setup: &app-setup
+  image: 'customer-app:latest'
+  build:
+    context: .
+    args:
+      GROUP_ID: "${GROUP_ID}"
+      USER_ID: "${USER_ID}"
+    dockerfile: Dockerfile
+  environment:
+    - "APPLICATION_DEBUG=${APPLICATION_DEBUG}"
+    - "APPLICATION_VERSION=${APPLICATION_VERSION}"
+    - "APPLICATION_DESCRIPTION=${APPLICATION_DESCRIPTION}"
+    - "DATABASE_HOST=${DATABASE_HOST}"
+    - "DATABASE_PORT=${DATABASE_PORT}"
+    - "DATABASE_DATABASE=${DATABASE_DATABASE}"
+    - "DATABASE_USERNAME=${DATABASE_USERNAME}"
+    - "DATABASE_PASSWORD=${DATABASE_PASSWORD}"
+  depends_on:
+    database:
+      condition: service_healthy
+  volumes:
+    - ./src:/app
+
+services:
+
+  app:
+    <<: *app-setup
+    ports:
+      - '${DOCKER_APPLICATION_EXPOSE_PORT}:${WEB_APPLICATION_PORT}'
+    entrypoint: [
+      "uvicorn", "interface.web.app:web_app",
+      "--host", "0.0.0.0",
+      "--port", "${WEB_APPLICATION_PORT}",
+      "--reload",
+    ]
+
+  app-migration:
+    <<: *app-setup
+
+  database:
+    image: 'postgres:latest'
+    environment:
+      - "POSTGRES_USER=${POSTGRES_USER}"
+      - "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}"
+      - "POSTGRES_DB=${POSTGRES_DB}"
+    ports:
+      - '${DOCKER_DATABASE_EXPOSE_PORT}:5432'
+    volumes:
+      - customer_app_db:/var/lib/postgresql/data/
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  customer_app_db:
