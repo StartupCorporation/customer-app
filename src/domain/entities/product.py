@@ -4,6 +4,7 @@ from typing import Annotated, NewType
 from pydantic import Field, UUID4
 
 from domain.entities.base import Entity
+from domain.exception.product.invalid_image_link import InvalidImageLink
 
 
 ProductID = NewType("ProductID", UUID4)
@@ -16,8 +17,23 @@ class Product(Entity[ProductID]):
     price: Annotated[float, Field(gt=0)]
     quantity: Annotated[int, Field(ge=0)]
     characteristic: dict
+    images: list[str]
 
     comments: list["Comment"]
+
+    def add_new_image(
+        self,
+        image_link: str,
+    ) -> None:
+        if not image_link:
+            raise InvalidImageLink(
+                "Image link cannot be zero-length."
+            )
+
+        if image_link in self.images:
+            return
+
+        self.images.append(image_link)
 
     def add_new_comment(
         self,

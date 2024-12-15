@@ -7,7 +7,6 @@ from infrastructure.di.module import Module
 from infrastructure.module import InfrastructureModule
 from infrastructure.settings.application import ApplicationSettings
 from interface.web.routes.category.routes import router as category_router
-from interface.web.routes.product.routes import router as product_router
 
 
 class WebApplication:
@@ -61,7 +60,6 @@ web_app = WebApplication(
         InfrastructureModule(),
     ),
     routes=(
-        product_router,
         category_router,
     ),
 )

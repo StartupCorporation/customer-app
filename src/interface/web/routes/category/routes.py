@@ -1,8 +1,14 @@
-from fastapi import APIRouter, status
+from typing import Annotated
 
-from domain.entities.category import CategoryType
-from interface.web.routes.category.contracts.output.category import CategoryOutputContract
-from interface.web.routes.category.contracts.output.product import CategoryProductOutputContract
+from fastapi import APIRouter, status, Path
+
+from domain.entities.category import CategoryID
+from domain.entities.product import ProductID
+from interface.web.routes.category.contracts.output.category import (
+    CategoryOutputContract,
+    CategoryProductOutputContract,
+)
+from interface.web.routes.category.contracts.output.product import ProductOutputContract
 
 
 router = APIRouter(
@@ -16,14 +22,32 @@ router = APIRouter(
     status_code=status.HTTP_200_OK,
 )
 async def get_categories() -> list[CategoryOutputContract]:
-    pass
+    """
+    Returns all categories that exist in the application.
+    """
 
 
 @router.get(
-    '/products/',
+    '/{id}/',
     status_code=status.HTTP_200_OK,
 )
 async def get_category_products(
-    category_type: CategoryType,
+    id_: Annotated[CategoryID, Path(alias='id')],
 ) -> list[CategoryProductOutputContract]:
-    pass
+    """
+    Returns list with short information about the products from the specific category.
+    """
+
+
+@router.get(
+    '/{category_id}/{id}/',
+    status_code=status.HTTP_200_OK,
+)
+async def get_product(
+    category_id: CategoryID,
+    id_: Annotated[ProductID, Path(alias='id')],
+) -> list[ProductOutputContract]:
+    """
+    Returns detailed information about a product.
+    """
+
