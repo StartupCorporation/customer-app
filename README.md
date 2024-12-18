@@ -61,7 +61,44 @@ export DATABASE_PORT=5432  # Port number to connect to the database
 export DATABASE_DATABASE=customer_app  # The database name to which application is connecting
 export DATABASE_USERNAME=dev  # The database user to connect
 export DATABASE_PASSWORD=devdev  # The database user's password to connect
+
+## ==== ALEMBIC
+export ALEMBIC_HOST=localhost  # Host to connect to the database from the host machine
+export ALEMBIC_PORT=6543  # Port number to connect to the database
+export ALEMBIC_DATABASE=customer_app  # The database name to which alembic is connecting
+export ALEMBIC_USERNAME=dev  # The database user to connect
+export ALEMBIC_PASSWORD=devdev  # The database user's password to connect
 ```
+
+## CLI Commands
+
+During the development, we can utilize some CLI commands. We can run them using the `invoke` library.
+
+### Packages
+
+Commands in this section provide an opportunity to work with project dependencies:
+```shell
+$ inv packages.compile  # Compiles libraries into requirements file. The default output file is `requirements.local.txt`
+$ inv packages.install  # Installs packages from the file with dependencies. The default dependency file is `requirements.local.txt`
+```
+
+### Infra
+
+Commands in this section provide an opportunity to manage local infrastructure for the development:
+```shell
+$ inv infra.up  # Starts local infrastructure for the application: database, web-app, etc.
+$ inv infra.down  # Stops and removes all docker containers used for the local infrastructure
+$ inv infra.build  # Builds images that are described in the `docker-compose.local.yaml` file
+```
+
+### Migration
+Handles logic of creating & applying database migrations files:
+```shell
+$ inv migration.run  # Applies migration files
+$ inv migration.autogenerate  # Generates new migration file with the latest model changes
+```
+
+
 
 ## Development Flow
 

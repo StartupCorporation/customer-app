@@ -1,0 +1,16 @@
+.git/
+.idea/
+**/__pycache__
+venv/
+tasks/
+src/customer_app.egg-info/
+src/infrastructure/database/migrations
+src/infrastructure/settings/alembic.py
+
+.gitignore
+.env.local
+docker-compose.local.yaml
+Dockerfile
+pyproject.toml
+README.md
+requirements.local.txt

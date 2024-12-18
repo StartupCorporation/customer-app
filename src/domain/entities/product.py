@@ -1,22 +1,22 @@
+from dataclasses import dataclass
 from datetime import datetime
-from typing import Annotated, NewType
-
-from pydantic import Field, UUID4
+from uuid import UUID
 
 from domain.entities.base import Entity
 from domain.exception.product.invalid_image_link import InvalidImageLink
 
 
-ProductID = NewType("ProductID", UUID4)
-CommentID = NewType('CommentID', UUID4)
+type ProductID = UUID
+type CommentID = UUID
 
 
+@dataclass(kw_only=True)
 class Product(Entity[ProductID]):
-    title: Annotated[str, Field(min_length=1)]
-    description: Annotated[str, Field(min_length=1)]
-    price: Annotated[float, Field(gt=0)]
-    quantity: Annotated[int, Field(ge=0)]
-    characteristic: dict
+    name: str
+    description: str
+    price: float
+    quantity: int
+    characteristics: dict
     images: list[str]
 
     comments: list["Comment"]
@@ -48,9 +48,10 @@ class Product(Entity[ProductID]):
         self.comments.remove(comment)
 
 
+@dataclass(kw_only=True)
 class Comment(Entity[CommentID]):
-    author: Annotated[str, Field(min_length=1)]
-    content: Annotated[str, Field(min_length=1)]
+    author: str
+    content: str
     created_at: datetime
 
     product_id: ProductID

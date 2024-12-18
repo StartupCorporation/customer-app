@@ -1,6 +1,8 @@
+from functools import cached_property
+
 from domain.entities.product import ProductID, Product
 from domain.repository.product import ProductRepository
-from infrastructure.repository.base import CRUDSQLAlchemyRepository
+from infrastructure.repository.relational.base import CRUDSQLAlchemyRepository
 
 
 class SQLAlchemyProductRepository(
@@ -8,6 +10,6 @@ class SQLAlchemyProductRepository(
     ProductRepository,
 ):
 
-    @property
-    def entity(self) -> type[Product]:
+    @cached_property
+    def entity_class(self) -> type[Product]:
         return Product

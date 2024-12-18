@@ -10,9 +10,9 @@ from interface.web.contracts import OutputContract
 
 class CategoryOutputContract(OutputContract):
     id: Annotated[CategoryID, Field(examples=[uuid.uuid4().hex])]
-    name: Annotated[str, Field(examples=["Accumulators"])]
+    title: Annotated[str, Field(examples=["Accumulators"])]
     description: Annotated[str, Field(examples=["Accumulators are rechargeable energy storage devices."])]
-    image_link: Annotated[str, Field(examples=["https://image.storage.com/accumulator.png"])]
+    image: Annotated[str, Field(examples=["accumulator.png"])]
 
 
 class CategoryProductOutputContract(OutputContract):
@@ -21,8 +21,8 @@ class CategoryProductOutputContract(OutputContract):
     images: Annotated[
         list[str],
         Field(examples=[[
-            "https://image.storage.com/accumulator/bosch-s4-1.png",
-            "https://image.storage.com/accumulator/bosch-s4-2.png",
-            "https://image.storage.com/accumulator/bosch-s4-3.png",
+            "bosch-s4-1.png",
+            "bosch-s4-2.png",
+            "bosch-s4-3.png",
         ]])
     ]

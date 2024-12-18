@@ -1,12 +1,9 @@
-from typing import TypeVar, Generic, Any
-
-from pydantic import BaseModel
-
-
-ID = TypeVar("ID")
+from dataclasses import dataclass
+from typing import Any
 
 
-class Entity(BaseModel, Generic[ID]):
+@dataclass(kw_only=True)
+class Entity[ID]:
     id: ID
 
     def __eq__(self, other: Any) -> bool:
