@@ -1,12 +1,13 @@
 from functools import cached_property
+from uuid import UUID
 
-from domain.entities.product import ProductID, Product
+from domain.entities.product import Product
 from domain.repository.product import ProductRepository
 from infrastructure.repository.relational.base import CRUDSQLAlchemyRepository
 
 
 class SQLAlchemyProductRepository(
-    CRUDSQLAlchemyRepository[ProductID, Product],
+    CRUDSQLAlchemyRepository[UUID, Product],
     ProductRepository,
 ):
 

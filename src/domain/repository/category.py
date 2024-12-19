@@ -1,10 +1,9 @@
-from abc import ABC, abstractmethod
+from abc import ABC
+from uuid import UUID
 
-from domain.entities.category import CategoryID, Category
+from domain.entities.category import Category
 from domain.repository.base import CRUDRepository
 
 
-class CategoryRepository(CRUDRepository[CategoryID, Category], ABC):
-
-    @abstractmethod
-    async def get_all(self) -> list[Category]: ...
+class CategoryRepository(CRUDRepository[UUID, Category], ABC):
+    pass

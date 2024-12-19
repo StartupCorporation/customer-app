@@ -12,7 +12,7 @@ from sqlalchemy.ext.asyncio import (
 from infrastructure.settings.database import DatabaseSettings
 
 
-class AsyncSQLDatabaseConnection:
+class AsyncSQLDatabaseConnectionManager:
 
     def __init__(
         self,

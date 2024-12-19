@@ -1,22 +1,20 @@
-import uuid
 from typing import Annotated
+from uuid import uuid4
 
-from pydantic import Field
+from pydantic import Field, UUID4
 
-from domain.entities.category import CategoryID
-from domain.entities.product import ProductID
 from interface.web.contracts import OutputContract
 
 
 class CategoryOutputContract(OutputContract):
-    id: Annotated[CategoryID, Field(examples=[uuid.uuid4().hex])]
-    title: Annotated[str, Field(examples=["Accumulators"])]
+    id: Annotated[UUID4, Field(examples=[uuid4().hex])]
+    name: Annotated[str, Field(examples=["Accumulators"])]
     description: Annotated[str, Field(examples=["Accumulators are rechargeable energy storage devices."])]
     image: Annotated[str, Field(examples=["accumulator.png"])]
 
 
 class CategoryProductOutputContract(OutputContract):
-    id: Annotated[ProductID, Field(examples=[uuid.uuid4().hex])]
+    id: Annotated[UUID4, Field(examples=[uuid4().hex])]
     name: Annotated[str, Field(examples=["Bosch S4 60Ah 540A 12V"])]
     images: Annotated[
         list[str],

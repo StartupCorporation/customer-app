@@ -6,14 +6,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from domain.entities.base import Entity
 from domain.repository.base import CRUDRepository
-from infrastructure.database.connection import AsyncSQLDatabaseConnection
+from infrastructure.database.connection import AsyncSQLDatabaseConnectionManager
 
 
 class SQLAlchemyRepository(ABC):
 
     def __init__(
         self,
-        connection_manager: AsyncSQLDatabaseConnection,
+        connection_manager: AsyncSQLDatabaseConnectionManager,
     ):
         self._connection_manager = connection_manager
 

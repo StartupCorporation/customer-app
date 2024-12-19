@@ -2,19 +2,18 @@ import uuid
 from datetime import datetime
 from typing import Annotated
 
-from pydantic import Field
+from pydantic import Field, UUID4
 
-from domain.entities.product import ProductID
 from interface.web.contracts import OutputContract
 
 
 class ProductOutputContract(OutputContract):
-    id: Annotated[ProductID, Field(examples=[uuid.uuid4().hex])]
+    id: Annotated[UUID4, Field(examples=[uuid.uuid4().hex])]
     name: Annotated[str, Field(examples=["Bosch S4 60Ah 540A 12V"])]
     description: Annotated[str, Field(examples=["Car SLA accumulator."])]
     quantity: Annotated[int, Field(examples=[5])]
     price: Annotated[float, Field(examples=[3670.50])]
-    characteristic: Annotated[
+    characteristics: Annotated[
         dict,
         Field(
             examples=[{

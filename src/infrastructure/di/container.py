@@ -1,5 +1,7 @@
 from typing import Any
 
+from infrastructure.di.exception.dependency_not_found import DependencyNotFound
+
 
 class Container:
 
@@ -17,4 +19,9 @@ class Container:
         self,
         item: type[INSTANCE],
     ) -> INSTANCE:
-        return self._dependencies[item]
+        dependency = self._dependencies.get(item)
+
+        if not dependency:
+            raise DependencyNotFound(f"Dependency '{item}' is not found.")
+
+        return dependency
