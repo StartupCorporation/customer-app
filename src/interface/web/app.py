@@ -2,7 +2,7 @@ from typing import Iterable, Awaitable, Callable
 
 from fastapi import FastAPI, Request, APIRouter, HTTPException, status
 
-from application.exception.base import NotFound
+from application.exception.base import NotFound, ApplicationException
 from application.module import ApplicationModule
 from infrastructure.di.container import Container
 from infrastructure.di.layer import Layer
@@ -51,8 +51,8 @@ class WebApplication:
             request.state.container = self._container
             return await call_next(request)
 
-        @app.exception_handler(Exception)
-        def base_app_exception_handler(
+        @app.exception_handler(ApplicationException)
+        def application_exception_handler(
             request: Request,  # noqa: ARG001
             exc: Exception,
         ) -> None:
@@ -68,8 +68,6 @@ class WebApplication:
                     status_code=status.HTTP_404_NOT_FOUND,
                     detail=str(exception),
                 )
-            case _:
-                raise exception
 
     def __call__(self):
         return self._app

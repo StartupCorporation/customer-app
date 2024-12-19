@@ -67,7 +67,7 @@ async def get_category_products(
 )
 async def get_product(
     container: Annotated[Container, Depends(get_di_container)],
-    # category_id: Annotated[UUID4, Path(description="The category `id`.")],  # noqa: ARG001
+    category_id: Annotated[UUID4, Path(description="The category `id`.")],  # noqa: ARG001
     id_: Annotated[UUID4, Path(alias='id', description="The product `id`.")],
 ) -> ProductOutputContract:
     """
