@@ -6,11 +6,8 @@ from domain.entities.product import Product
 from domain.exception.product.invalid_image_link import InvalidImageLink
 
 
-type CategoryID = UUID
-
-
 @dataclass(kw_only=True)
-class Category(Entity[CategoryID]):
+class Category(Entity[UUID]):
     name: str
     description: str
     image: str

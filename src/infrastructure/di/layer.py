@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from infrastructure.di.container import Container
 
 
-class Module(ABC):
+class Layer(ABC):
 
     @abstractmethod
     def setup(self, container: Container) -> None: ...

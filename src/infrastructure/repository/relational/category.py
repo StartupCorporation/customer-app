@@ -1,20 +1,15 @@
 from functools import cached_property
+from uuid import UUID
 
-from sqlalchemy import select
-
-from domain.entities.category import CategoryID, Category
+from domain.entities.category import Category
 from domain.repository.category import CategoryRepository
 from infrastructure.repository.relational.base import CRUDSQLAlchemyRepository
 
 
 class SQLAlchemyCategoryRepository(
-    CRUDSQLAlchemyRepository[CategoryID, Category],
+    CRUDSQLAlchemyRepository[UUID, Category],
     CategoryRepository,
 ):
-
-    async def get_all(self) -> list[Category]:
-        stmt = select(self.entity_class)
-        return await self._scalars(stmt)
 
     @cached_property
     def entity_class(self) -> type[Category]:

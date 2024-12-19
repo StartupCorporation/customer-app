@@ -8,6 +8,7 @@ dependencies = [
     "sqlalchemy[asyncio]",
     "fastapi",
     "uvicorn",
+    "asyncpg",
 ]
 
 [project.optional-dependencies]
@@ -16,5 +17,4 @@ local = [
     "ipython",
     "invoke",
     "alembic",
-    "asyncpg",
 ]

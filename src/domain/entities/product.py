@@ -6,12 +6,8 @@ from domain.entities.base import Entity
 from domain.exception.product.invalid_image_link import InvalidImageLink
 
 
-type ProductID = UUID
-type CommentID = UUID
-
-
 @dataclass(kw_only=True)
-class Product(Entity[ProductID]):
+class Product(Entity[UUID]):
     name: str
     description: str
     price: float
@@ -49,9 +45,9 @@ class Product(Entity[ProductID]):
 
 
 @dataclass(kw_only=True)
-class Comment(Entity[CommentID]):
+class Comment(Entity[UUID]):
     author: str
     content: str
     created_at: datetime
 
-    product_id: ProductID
+    product_id: UUID
