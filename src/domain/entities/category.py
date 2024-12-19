@@ -20,7 +20,7 @@ class Category(Entity[UUID]):
     ) -> None:
         if not image:
             raise InvalidImageLink(
-                "Image link cannot be zero-length."
+                "Image link cannot be zero-length.",
             )
 
         self.image = image

@@ -53,7 +53,7 @@ class WebApplication:
 
         @app.exception_handler(Exception)
         def base_app_exception_handler(
-            request: Request,
+            request: Request,  # noqa: ARG001
             exc: Exception,
         ) -> None:
             raise self._exception_factory(exception=exc)

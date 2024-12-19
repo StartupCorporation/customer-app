@@ -13,7 +13,7 @@ GET_PRODUCT_RESPONSES = {
                 'example': {
                     'detail': "Product with id '<product id>' is not found.",
                 },
-            }
-        }
-    }
+            },
+        },
+    },
 }

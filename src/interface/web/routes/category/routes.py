@@ -31,7 +31,7 @@ router = APIRouter(
     responses=GET_CATEGORIES_RESPONSES,
 )
 async def get_categories(
-    container: Annotated[Container, Depends(get_di_container)]
+    container: Annotated[Container, Depends(get_di_container)],
 ) -> list[CategoryOutputContract]:
     """
     Returns all categories that exist in the application.
@@ -67,7 +67,7 @@ async def get_category_products(
 )
 async def get_product(
     container: Annotated[Container, Depends(get_di_container)],
-    category_id: Annotated[UUID4, Path(description="The category `id`.")],
+    # category_id: Annotated[UUID4, Path(description="The category `id`.")],  # noqa: ARG001
     id_: Annotated[UUID4, Path(alias='id', description="The product `id`.")],
 ) -> ProductOutputContract:
     """

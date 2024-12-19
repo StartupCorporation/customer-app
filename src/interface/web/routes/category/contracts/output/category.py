@@ -22,5 +22,5 @@ class CategoryProductOutputContract(OutputContract):
             "bosch-s4-1.png",
             "bosch-s4-2.png",
             "bosch-s4-3.png",
-        ]])
+        ]]),
     ]

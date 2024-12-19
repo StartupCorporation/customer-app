@@ -15,7 +15,7 @@ class CommandBus(MessageBus[None]):
     ):
         self._handlers = {}
         self._middleware_chain: Callable[[Command], Awaitable[None]] = self._build_middleware_chain(
-            middlewares=middlewares or []
+            middlewares=middlewares or [],
         )
 
     def register(self, message: type[Command], handler: CommandHandler) -> None:
@@ -33,7 +33,7 @@ class CommandBus(MessageBus[None]):
 
             if not command_handler:
                 raise CommandHandlerDoesNotExist(
-                    f"Command handler doesn't exist for the '{message.__class__}' command."
+                    f"Command handler doesn't exist for the '{message.__class__}' command.",
                 )
 
             await command_handler(message)

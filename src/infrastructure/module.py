@@ -37,7 +37,7 @@ class InfrastructureModule(Layer):
         container[CommandBus] = CommandBus(
             middlewares=(
                 container[TransactionMiddleware],
-            )
+            ),
         )
         container[QueryBus] = QueryBus()
 

@@ -1,7 +1,7 @@
 """empty message
 
 Revision ID: 17b8e8076831
-Revises: 
+Revises:
 Create Date: 2024-12-18 17:44:58.678197
 
 """
@@ -25,7 +25,7 @@ def upgrade() -> None:
         sa.Column('image', sa.String(), nullable=False),
         sa.Column('id', sa.Uuid(), server_default=sa.text('gen_random_uuid()'), nullable=False),
         sa.PrimaryKeyConstraint('id'),
-        sa.UniqueConstraint('name')
+        sa.UniqueConstraint('name'),
     )
     op.create_table(
         'product',
@@ -38,7 +38,7 @@ def upgrade() -> None:
         sa.Column('category_id', sa.Uuid(), nullable=False),
         sa.Column('id', sa.Uuid(), server_default=sa.text('gen_random_uuid()'), nullable=False),
         sa.ForeignKeyConstraint(['category_id'], ['category.id'], onupdate='CASCADE', ondelete='CASCADE'),
-        sa.PrimaryKeyConstraint('id')
+        sa.PrimaryKeyConstraint('id'),
     )
     op.create_table(
         'product_comment',
@@ -48,7 +48,7 @@ def upgrade() -> None:
         sa.Column('product_id', sa.Uuid(), nullable=False),
         sa.Column('id', sa.Uuid(), server_default=sa.text('gen_random_uuid()'), nullable=False),
         sa.ForeignKeyConstraint(['product_id'], ['product.id'], onupdate='CASCADE', ondelete='CASCADE'),
-        sa.PrimaryKeyConstraint('id')
+        sa.PrimaryKeyConstraint('id'),
     )
 
 

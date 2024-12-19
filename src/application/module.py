@@ -17,17 +17,17 @@ class ApplicationModule(Layer):
             message=GetCategoriesQuery,
             handler=GetCategoriesQueryHandler(
                 connection_manager=container[AsyncSQLDatabaseConnectionManager],
-            )
+            ),
         )
         container[QueryBus].register(
             message=GetCategoryProductsQuery,
             handler=GetCategoryProductsQueryHandler(
                 connection_manager=container[AsyncSQLDatabaseConnectionManager],
-            )
+            ),
         )
         container[QueryBus].register(
             message=GetProductDetailsQuery,
             handler=GetProductDetailsQueryHandler(
                 connection_manager=container[AsyncSQLDatabaseConnectionManager],
-            )
+            ),
         )

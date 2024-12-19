@@ -4,7 +4,7 @@ from tasks.shared import _change_to_root_dir
 
 
 @task(
-    pre=[_change_to_root_dir]
+    pre=[_change_to_root_dir],
 )
 def up(
     context: Context,
@@ -17,7 +17,7 @@ def up(
 
 
 @task(
-    pre=[_change_to_root_dir]
+    pre=[_change_to_root_dir],
 )
 def build(
     context: Context,
@@ -33,7 +33,7 @@ def build(
     help={
         "save_volumes": "To remove docker volumes created by the infrastructure.",
     },
-    pre=[_change_to_root_dir]
+    pre=[_change_to_root_dir],
 )
 def down(
     context: Context,

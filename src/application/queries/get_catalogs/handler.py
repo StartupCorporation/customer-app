@@ -17,7 +17,7 @@ class GetCategoriesQueryHandler(QueryHandler[CategoryQueryResult]):
 
     async def __call__(
         self,
-        message: GetCategoriesQuery,
+        message: GetCategoriesQuery,  # noqa: ARG002
     ) -> CategoryQueryResult:
         async with self._connection_manager.connect() as session:
             stmt = select(Category)

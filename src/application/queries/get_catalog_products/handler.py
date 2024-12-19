@@ -23,7 +23,7 @@ class GetCategoryProductsQueryHandler(QueryHandler[GetCategoryProductsQueryResul
             stmt = select(
                 Product.id,
                 Product.name,
-                Product.images
+                Product.images,
             ).where(
                 Product.category_id == message.category_id,
             )

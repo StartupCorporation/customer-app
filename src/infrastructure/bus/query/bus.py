@@ -19,7 +19,7 @@ class QueryBus(MessageBus[Any]):
 
         if not query_handler:
             raise QueryHandlerDoesNotExist(
-                f"Query handler doesn't exist for the '{message.__class__}' query."
+                f"Query handler doesn't exist for the '{message.__class__}' query.",
             )
 
         return await query_handler(message)

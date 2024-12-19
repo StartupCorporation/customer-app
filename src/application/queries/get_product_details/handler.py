@@ -66,5 +66,5 @@ class GetProductDetailsQueryHandler(QueryHandler[GetProductDetailsQueryResult]):
                     content=comment.content,
                     created_at=comment.created_at,
                 ) for comment in comments
-            ]
+            ],
         )

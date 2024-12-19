@@ -21,8 +21,8 @@ class ProductOutputContract(OutputContract):
                 "type": "SLA",
                 "voltage": "12 V",
                 "amperage": "540 A",
-                "made in": "Germany"
-            }]
+                "made in": "Germany",
+            }],
         )]
     images: Annotated[
         list[str],
@@ -31,8 +31,8 @@ class ProductOutputContract(OutputContract):
                 "bosch-s4-1.png",
                 "bosch-s4-2.png",
                 "bosch-s4-3.png",
-            ]]
-        )
+            ]],
+        ),
     ]
     comments: list["ProductCommentOutputContract"]
 

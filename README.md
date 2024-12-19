@@ -34,7 +34,7 @@ You can configure how the application is deployed locally via the `.env.local` f
 ## ======================================
 
 ## ==== DOCKER
-export DOCKER_APPLICATION_EXPOSE_PORT=8000  # Exposed port number of the application container 
+export DOCKER_APPLICATION_EXPOSE_PORT=8000  # Exposed port number of the application container
 export DOCKER_DATABASE_EXPOSE_PORT=6543  # Exposed port number of the database container
 
 ## ==== DATABASE
@@ -105,6 +105,8 @@ $ inv migration.autogenerate  # Generates new migration file with the latest mod
 ### Commits
 
 Commits' messages should be written using the [conventional commit](https://www.conventionalcommits.org/en/v1.0.0/) specification.
+
+Conventional commits [cheatsheet](https://gist.github.com/qoomon/5dfcdf8eec66a051ecd85625518cfd13).
 
 ### Branches
 

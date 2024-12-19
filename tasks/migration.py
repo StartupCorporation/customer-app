@@ -7,7 +7,7 @@ from tasks.shared import _change_to_root_dir
 
 
 @task(
-    pre=[_change_to_root_dir]
+    pre=[_change_to_root_dir],
 )
 def _change_to_migrations_root(ctx):
     """
@@ -17,7 +17,7 @@ def _change_to_migrations_root(ctx):
 
 
 @task(
-    pre=[_change_to_migrations_root]
+    pre=[_change_to_migrations_root],
 )
 def run(
     context: Context,
@@ -29,7 +29,7 @@ def run(
 
 
 @task(
-    pre=[_change_to_migrations_root]
+    pre=[_change_to_migrations_root],
 )
 def autogenerate(
     context: Context,

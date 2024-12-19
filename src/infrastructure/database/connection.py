@@ -34,7 +34,7 @@ class AsyncSQLDatabaseConnectionManager:
                 database=self._settings.DATABASE,
                 host=self._settings.HOST,
                 port=self._settings.PORT,
-            )
+            ),
         )
 
     @cached_property

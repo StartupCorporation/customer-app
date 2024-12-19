@@ -10,7 +10,7 @@ from tasks.shared import _change_to_root_dir
         "output_file": "The output file where compiled packages will be written.",
     },
     optional=['extra'],
-    pre=[_change_to_root_dir]
+    pre=[_change_to_root_dir],
 )
 def compile_(
     context: Context,
@@ -33,7 +33,7 @@ def compile_(
         args.insert(0, f"--extra {extra}")
 
     context.run(f"pip-compile {' '.join(args)}")
-    context.run(f"rm -rf src/customer_app.egg-info")
+    context.run("rm -rf src/customer_app.egg-info")
     print(f"Successfully compiled packages to the '{output_file}'.")
 
 
@@ -41,7 +41,7 @@ def compile_(
     help={
         "file": "The file containing the packages to install.",
     },
-    pre=[_change_to_root_dir]
+    pre=[_change_to_root_dir],
 )
 def install(
     context: Context,
