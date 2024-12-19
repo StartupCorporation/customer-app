@@ -1,43 +1,39 @@
 version: '3.9'
 
-x-app-setup: &app-setup
-  image: 'customer-app:latest'
-  build:
-    context: .
-    args:
-      GROUP_ID: "${GROUP_ID}"
-      USER_ID: "${USER_ID}"
-    dockerfile: Dockerfile
-  environment:
-    - "APPLICATION_DEBUG=${APPLICATION_DEBUG}"
-    - "APPLICATION_VERSION=${APPLICATION_VERSION}"
-    - "APPLICATION_DESCRIPTION=${APPLICATION_DESCRIPTION}"
-    - "DATABASE_HOST=${DATABASE_HOST}"
-    - "DATABASE_PORT=${DATABASE_PORT}"
-    - "DATABASE_DATABASE=${DATABASE_DATABASE}"
-    - "DATABASE_USERNAME=${DATABASE_USERNAME}"
-    - "DATABASE_PASSWORD=${DATABASE_PASSWORD}"
-  depends_on:
-    database:
-      condition: service_healthy
-  volumes:
-    - ./src:/app
-
 services:
 
   app:
-    <<: *app-setup
+    image: 'customer-app:latest'
+    build:
+      context: .
+      args:
+        GROUP_ID: "${GROUP_ID}"
+        USER_ID: "${USER_ID}"
+      dockerfile: Dockerfile
+    environment:
+      - "APPLICATION_DEBUG=${APPLICATION_DEBUG}"
+      - "APPLICATION_VERSION=${APPLICATION_VERSION}"
+      - "APPLICATION_DESCRIPTION=${APPLICATION_DESCRIPTION}"
+      - "DATABASE_HOST=${DATABASE_HOST}"
+      - "DATABASE_PORT=${DATABASE_PORT}"
+      - "DATABASE_DATABASE=${DATABASE_DATABASE}"
+      - "DATABASE_USERNAME=${DATABASE_USERNAME}"
+      - "DATABASE_PASSWORD=${DATABASE_PASSWORD}"
     ports:
       - '${DOCKER_APPLICATION_EXPOSE_PORT}:${WEB_APPLICATION_PORT}'
     entrypoint: [
       "uvicorn", "interface.web.app:web_app",
       "--host", "0.0.0.0",
       "--port", "${WEB_APPLICATION_PORT}",
+      "--factory",
       "--reload",
     ]
+    depends_on:
+      database:
+        condition: service_healthy
+    volumes:
+      - ./src:/app
 
-  app-migration:
-    <<: *app-setup
 
   database:
     image: 'postgres:latest'

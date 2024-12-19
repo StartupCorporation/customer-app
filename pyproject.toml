@@ -4,7 +4,6 @@ version = "0.0.1"
 description = "The customer microservice application."
 requires-python = ">=3.12"
 dependencies = [
-    "pydantic",
     "pydantic-settings",
     "sqlalchemy[asyncio]",
     "fastapi",
@@ -16,4 +15,6 @@ local = [
     "pytest",
     "ipython",
     "invoke",
+    "alembic",
+    "asyncpg",
 ]

@@ -29,9 +29,9 @@ class ProductOutputContract(OutputContract):
         list[str],
         Field(
             examples=[[
-                "https://image.storage.com/accumulator/bosch-s4-1.png",
-                "https://image.storage.com/accumulator/bosch-s4-2.png",
-                "https://image.storage.com/accumulator/bosch-s4-3.png",
+                "bosch-s4-1.png",
+                "bosch-s4-2.png",
+                "bosch-s4-3.png",
             ]]
         )
     ]
