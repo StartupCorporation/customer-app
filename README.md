@@ -36,14 +36,29 @@ You can configure how the application is deployed locally via the `.env.local` f
 ## ==== DOCKER
 export DOCKER_APPLICATION_EXPOSE_PORT=8000  # Exposed port number of the application container
 export DOCKER_DATABASE_EXPOSE_PORT=6543  # Exposed port number of the database container
+export DOCKER_RABBITMQ_EXPOSE_PORT=15672  # Exposed port number of the rabbitmq UI application
 
 ## ==== DATABASE
 export POSTGRES_USER=dev  # The user's name that will be created in the database container
 export POSTGRES_PASSWORD=devdev  # The user's password in the database container
 export POSTGRES_DB=database  # The database name in the database container
 
+## ==== RABBITMQ
+export RABBITMQ_DEFAULT_USER=dev  # User's name that will be created in the rabbitmq container
+export RABBITMQ_DEFAULT_PASS=devdev  # User's password that will be created in the rabbitmq container
+
+## ==== RABBITMQ SETUP
+export RABBITMQ_SETUP_RABBIT_HOST=rabbitmq  # RabbitMQ host to connect
+export RABBITMQ_SETUP_RABBIT_PORT=15672  # RabbitMQ port to connect
+export RABBITMQ_SETUP_RABBIT_USERNAME=dev  # User's name to connect
+export RABBITMQ_SETUP_RABBIT_PASSWORD=devdev  # User's password to connect
+export RABBITMQ_SETUP_RABBIT_COMMENTS_QUEUE=comments-queue  # Comments queue name
+export RABBITMQ_SETUP_RABBIT_PRODUCTS_QUEUE=products-queue  # Products queue name
+export RABBITMQ_SETUP_RABBIT_ORDERS_QUEUE=orders-queue  # Orders queue name
+export RABBITMQ_SETUP_RABBIT_CATEGORY_QUEUE=category-queue  # Category queue name
+
 ## ==== APPLICATION
-export WEB_APPLICATION_PORT=8000  # What port is listening by the application
+export WEB_APPLICATION_PORT=8000  # What port is listening by the customer application
 
 
 ## ===================================
@@ -68,6 +83,16 @@ export ALEMBIC_PORT=6543  # Port number to connect to the database
 export ALEMBIC_DATABASE=customer_app  # The database name to which alembic is connecting
 export ALEMBIC_USERNAME=dev  # The database user to connect
 export ALEMBIC_PASSWORD=devdev  # The database user's password to connect
+
+## ==== RABBITMQ
+export RABBITMQ_USERNAME=dev  # RabbitMQ User's name to connect
+export RABBITMQ_PASSWORD=devdev  # RabbitMQ User's password to connect
+export RABBITMQ_HOST=rabbitmq  # RabbitMQ host to connect
+export RABBITMQ_PORT=5672  # RabbitMQ port to connect
+export RABBITMQ_COMMENTS_QUEUE=comments-queue  # RabbitMQ Comments queue name
+export RABBITMQ_PRODUCTS_QUEUE=products-queue  # RabbitMQ Products queue name
+export RABBITMQ_ORDERS_QUEUE=orders-queue  # RabbitMQ Orders queue name
+export RABBITMQ_CATEGORY_QUEUE=category-queue  # RabbitMQ Category queue name
 ```
 
 ## CLI Commands

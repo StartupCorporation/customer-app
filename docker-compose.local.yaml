@@ -10,6 +10,7 @@ services:
         GROUP_ID: "${GROUP_ID}"
         USER_ID: "${USER_ID}"
       dockerfile: Dockerfile
+    restart: always
     environment:
       - "APPLICATION_DEBUG=${APPLICATION_DEBUG}"
       - "APPLICATION_VERSION=${APPLICATION_VERSION}"
@@ -31,12 +32,52 @@ services:
     depends_on:
       database:
         condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     volumes:
       - ./src:/app
 
+  rabbitmq:
+    image: rabbitmq:4.0.5-management
+    hostname: rabbitmq
+    ports:
+      - '${DOCKER_RABBITMQ_EXPOSE_PORT}:15672'
+    restart: always
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    environment:
+      - "RABBITMQ_DEFAULT_USER=dev"
+      - "RABBITMQ_DEFAULT_PASS=devdev"
+      - "RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit log_levels [{connection,error},{default,error}]"
+    healthcheck:
+      test: rabbitmq-diagnostics check_port_connectivity
+      interval: 1s
+      timeout: 10s
+      retries: 10
+
+  rabbit-mq-setup:
+    image: alpine
+    entrypoint: [ "sh","-c" ]
+    command:
+      - |
+        apk -q add curl python3
+
+        curl --no-progress-meter -s -o /usr/local/bin/rabbitmqadmin http://${RABBITMQ_SETUP_RABBIT_HOST}:${RABBITMQ_SETUP_RABBIT_PORT}/cli/rabbitmqadmin
+        chmod +x /usr/local/bin/rabbitmqadmin
+
+        alias rabbitmqadmin="rabbitmqadmin --host=${RABBITMQ_SETUP_RABBIT_HOST} --port=${RABBITMQ_SETUP_RABBIT_PORT} --username=${RABBITMQ_SETUP_RABBIT_USERNAME} --password=${RABBITMQ_SETUP_RABBIT_PASSWORD}"
+
+        rabbitmqadmin -q declare queue name=${RABBITMQ_SETUP_RABBIT_COMMENTS_QUEUE} durable=true
+        rabbitmqadmin -q declare queue name=${RABBITMQ_SETUP_RABBIT_PRODUCTS_QUEUE} durable=true
+        rabbitmqadmin -q declare queue name=${RABBITMQ_SETUP_RABBIT_ORDERS_QUEUE} durable=true
+        rabbitmqadmin -q declare queue name=${RABBITMQ_SETUP_RABBIT_CATEGORY_QUEUE} durable=true
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
 
   database:
     image: 'postgres:latest'
+    restart: always
     environment:
       - "POSTGRES_USER=${POSTGRES_USER}"
       - "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}"
@@ -47,9 +88,10 @@ services:
       - customer_app_db:/var/lib/postgresql/data/
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
-      interval: 5s
-      timeout: 5s
-      retries: 3
+      interval: 1s
+      timeout: 10s
+      retries: 10
 
 volumes:
   customer_app_db:
+  rabbitmq_data:
