@@ -1,13 +1,13 @@
-from dataclasses import dataclass
 from datetime import datetime
 from uuid import UUID
+
+from pydantic import BaseModel
 
 
 type GetProductDetailsQueryResult = ProductDetails
 
 
-@dataclass(kw_only=True, slots=True, frozen=True)
-class ProductDetails:
+class ProductDetails(BaseModel):
     id: UUID
     name: str
     description: str
@@ -18,8 +18,7 @@ class ProductDetails:
     comments: list["ProductDetailsComment"]
 
 
-@dataclass(kw_only=True, slots=True, frozen=True)
-class ProductDetailsComment:
+class ProductDetailsComment(BaseModel):
     author: str
     content: str
     created_at: datetime

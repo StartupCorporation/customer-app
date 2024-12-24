@@ -1,25 +1,41 @@
 version: '3.9'
 
+x-app-setup: &app-setup
+  image: 'customer-app:latest'
+  build:
+    context: .
+    args:
+      GROUP_ID: "${GROUP_ID}"
+      USER_ID: "${USER_ID}"
+    dockerfile: Dockerfile
+  restart: always
+  environment: &app-environment-variables
+    APPLICATION_DEBUG: ${APPLICATION_DEBUG}
+    APPLICATION_VERSION: ${APPLICATION_VERSION}
+    APPLICATION_DESCRIPTION: ${APPLICATION_DESCRIPTION}
+
+    DATABASE_HOST: ${DATABASE_HOST}
+    DATABASE_PORT: ${DATABASE_PORT}
+    DATABASE_DATABASE: ${DATABASE_DATABASE}
+    DATABASE_USERNAME: ${DATABASE_USERNAME}
+    DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+
+    RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
+    RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+    RABBITMQ_HOST: ${RABBITMQ_HOST}
+    RABBITMQ_PORT: ${RABBITMQ_PORT}
+  depends_on:
+    database:
+      condition: service_healthy
+    rabbit-mq-setup:
+      condition: service_completed_successfully
+  volumes:
+    - ./src:/app
+
 services:
 
-  app:
-    image: 'customer-app:latest'
-    build:
-      context: .
-      args:
-        GROUP_ID: "${GROUP_ID}"
-        USER_ID: "${USER_ID}"
-      dockerfile: Dockerfile
-    restart: always
-    environment:
-      - "APPLICATION_DEBUG=${APPLICATION_DEBUG}"
-      - "APPLICATION_VERSION=${APPLICATION_VERSION}"
-      - "APPLICATION_DESCRIPTION=${APPLICATION_DESCRIPTION}"
-      - "DATABASE_HOST=${DATABASE_HOST}"
-      - "DATABASE_PORT=${DATABASE_PORT}"
-      - "DATABASE_DATABASE=${DATABASE_DATABASE}"
-      - "DATABASE_USERNAME=${DATABASE_USERNAME}"
-      - "DATABASE_PASSWORD=${DATABASE_PASSWORD}"
+  web-app:
+    <<: *app-setup
     ports:
       - '${DOCKER_APPLICATION_EXPOSE_PORT}:${WEB_APPLICATION_PORT}'
     entrypoint: [
@@ -29,13 +45,15 @@ services:
       "--factory",
       "--reload",
     ]
-    depends_on:
-      database:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
-    volumes:
-      - ./src:/app
+
+  category-queue-consumer:
+    <<: *app-setup
+    environment:
+      <<: *app-environment-variables
+      PYTHONPATH: "/app/"
+    entrypoint: [
+      "python", "interface/cli/app.py", "queue", "consume", "${RABBITMQ_SETUP_RABBIT_CATEGORY_QUEUE}"
+    ]
 
   rabbitmq:
     image: rabbitmq:4.0.5-management

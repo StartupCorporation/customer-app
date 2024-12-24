@@ -52,10 +52,10 @@ export RABBITMQ_SETUP_RABBIT_HOST=rabbitmq  # RabbitMQ host to connect
 export RABBITMQ_SETUP_RABBIT_PORT=15672  # RabbitMQ port to connect
 export RABBITMQ_SETUP_RABBIT_USERNAME=dev  # User's name to connect
 export RABBITMQ_SETUP_RABBIT_PASSWORD=devdev  # User's password to connect
-export RABBITMQ_SETUP_RABBIT_COMMENTS_QUEUE=comments-queue  # Comments queue name
-export RABBITMQ_SETUP_RABBIT_PRODUCTS_QUEUE=products-queue  # Products queue name
-export RABBITMQ_SETUP_RABBIT_ORDERS_QUEUE=orders-queue  # Orders queue name
-export RABBITMQ_SETUP_RABBIT_CATEGORY_QUEUE=category-queue  # Category queue name
+export RABBITMQ_SETUP_RABBIT_COMMENTS_QUEUE=comments-message_broker  # Comments message_broker name
+export RABBITMQ_SETUP_RABBIT_PRODUCTS_QUEUE=products-message_broker  # Products message_broker name
+export RABBITMQ_SETUP_RABBIT_ORDERS_QUEUE=orders-message_broker  # Orders message_broker name
+export RABBITMQ_SETUP_RABBIT_CATEGORY_QUEUE=category-message_broker  # Category message_broker name
 
 ## ==== APPLICATION
 export WEB_APPLICATION_PORT=8000  # What port is listening by the customer application
@@ -89,10 +89,10 @@ export RABBITMQ_USERNAME=dev  # RabbitMQ User's name to connect
 export RABBITMQ_PASSWORD=devdev  # RabbitMQ User's password to connect
 export RABBITMQ_HOST=rabbitmq  # RabbitMQ host to connect
 export RABBITMQ_PORT=5672  # RabbitMQ port to connect
-export RABBITMQ_COMMENTS_QUEUE=comments-queue  # RabbitMQ Comments queue name
-export RABBITMQ_PRODUCTS_QUEUE=products-queue  # RabbitMQ Products queue name
-export RABBITMQ_ORDERS_QUEUE=orders-queue  # RabbitMQ Orders queue name
-export RABBITMQ_CATEGORY_QUEUE=category-queue  # RabbitMQ Category queue name
+export RABBITMQ_COMMENTS_QUEUE=comments-message_broker  # RabbitMQ Comments message_broker name
+export RABBITMQ_PRODUCTS_QUEUE=products-message_broker  # RabbitMQ Products message_broker name
+export RABBITMQ_ORDERS_QUEUE=orders-message_broker  # RabbitMQ Orders message_broker name
+export RABBITMQ_CATEGORY_QUEUE=category-message_broker  # RabbitMQ Category message_broker name
 ```
 
 ## CLI Commands

@@ -4,9 +4,10 @@ from fastapi import FastAPI, Request, APIRouter, HTTPException, status
 
 from application.exception.base import NotFound, ApplicationException
 from application.module import ApplicationModule
+from domain.layer import DomainLayer
 from infrastructure.di.container import Container
 from infrastructure.di.layer import Layer
-from infrastructure.module import InfrastructureModule
+from infrastructure.layer import InfrastructureLayer
 from infrastructure.settings.application import ApplicationSettings
 from interface.web.routes.category.routes import router as category_router
 
@@ -15,18 +16,18 @@ class WebApplication:
 
     def __init__(
         self,
-        modules: Iterable[Layer],
+        layers: Iterable[Layer],
         routes: Iterable[APIRouter],
     ):
         self._container = Container()
-        self._modules = modules
+        self._layers = layers
         self._setup_modules()
         self._app = self._create_application(
             routes=routes,
         )
 
     def _setup_modules(self):
-        for module in self._modules:
+        for module in self._layers:
             module.setup(container=self._container)
 
     def _create_application(
@@ -74,8 +75,9 @@ class WebApplication:
 
 
 web_app = WebApplication(
-    modules=(
-        InfrastructureModule(),
+    layers=(
+        InfrastructureLayer(),
+        DomainLayer(),
         ApplicationModule(),
     ),
     routes=(

@@ -5,10 +5,13 @@ description = "The customer microservice application."
 requires-python = ">=3.12"
 dependencies = [
     "pydantic-settings",
+    "pydantic",
     "sqlalchemy[asyncio]",
     "fastapi",
     "uvicorn",
     "asyncpg",
+    "typer",
+    "aio-pika",
 ]
 
 [project.optional-dependencies]

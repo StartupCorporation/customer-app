@@ -3,10 +3,10 @@ from typing import Annotated
 from fastapi import APIRouter, status, Path, Depends
 from pydantic import UUID4
 
-from application.queries.get_catalog_products.query import GetCategoryProductsQuery
-from application.queries.get_catalogs.query import GetCategoriesQuery
+from application.queries.get_category_products.query import GetCategoryProductsQuery
+from application.queries.get_categories.query import GetCategoriesQuery
 from application.queries.get_product_details.query import GetProductDetailsQuery
-from infrastructure.bus.query.bus import QueryBus
+from infrastructure.bus.impl.query.bus import QueryBus
 from infrastructure.di.container import Container
 from interface.web.dependencies.container import get_di_container
 from interface.web.routes.category.contracts.output.category import (

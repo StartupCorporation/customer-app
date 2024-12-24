@@ -4,3 +4,4 @@ venv/
 src/customer_app.egg-info/
 
 .env
+asyncapi.yaml

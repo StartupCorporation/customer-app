@@ -7,10 +7,10 @@ from application.queries.get_product_details.result import (
     ProductDetails,
     ProductDetailsComment,
 )
-from infrastructure.bus.query.handler import QueryHandler
-from infrastructure.database.connection import AsyncSQLDatabaseConnectionManager
-from infrastructure.database.models.comment import ProductComment
-from infrastructure.database.models.product import Product
+from infrastructure.bus.impl.query.handler import QueryHandler
+from infrastructure.database.relational.connection import AsyncSQLDatabaseConnectionManager
+from infrastructure.database.relational.models.comment import ProductComment
+from infrastructure.database.relational.models.product import Product
 
 
 class GetProductDetailsQueryHandler(QueryHandler[GetProductDetailsQueryResult]):

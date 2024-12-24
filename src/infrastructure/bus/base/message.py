@@ -1,7 +1,7 @@
 from abc import ABC
-from dataclasses import dataclass
+
+from pydantic import BaseModel
 
 
-@dataclass(kw_only=True, frozen=True, slots=True)
-class Message(ABC):
+class Message(BaseModel, ABC):
     pass

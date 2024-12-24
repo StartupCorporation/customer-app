@@ -2,7 +2,7 @@ from typing import Callable, Awaitable, Any
 
 from infrastructure.bus.base.message import Message
 from infrastructure.bus.base.middleware import MessageHandlerMiddleware
-from infrastructure.database.transaction import TransactionManager
+from infrastructure.database.relational.transaction import TransactionManager
 
 
 class TransactionMiddleware[RESULT](MessageHandlerMiddleware[RESULT]):

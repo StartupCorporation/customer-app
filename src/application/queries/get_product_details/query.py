@@ -1,9 +1,7 @@
-from dataclasses import dataclass
-from uuid import UUID
+from pydantic import UUID4
 
-from infrastructure.bus.query.message import Query
+from infrastructure.bus.impl.query.message import Query
 
 
-@dataclass(kw_only=True, slots=True, frozen=True)
 class GetProductDetailsQuery(Query):
-    product_id: UUID
+    product_id: UUID4
