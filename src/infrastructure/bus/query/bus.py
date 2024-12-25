@@ -1,9 +1,9 @@
 from typing import Any
 
 from infrastructure.bus.base.bus import MessageBus
-from infrastructure.bus.impl.query.exception.query_handler_doesnt_exist import QueryHandlerDoesNotExist
-from infrastructure.bus.impl.query.handler import QueryHandler
-from infrastructure.bus.impl.query.message import Query
+from infrastructure.bus.query.exception.query_handler_doesnt_exist import QueryHandlerDoesNotExist
+from infrastructure.bus.query.handler import QueryHandler
+from infrastructure.bus.query.message import Query
 
 
 class QueryBus(MessageBus[Any]):

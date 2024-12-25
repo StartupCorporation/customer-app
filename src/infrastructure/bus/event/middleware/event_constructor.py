@@ -2,8 +2,8 @@ from typing import Callable, Awaitable
 
 from infrastructure.bus.base.message import Message
 from infrastructure.bus.base.middleware import MessageHandlerMiddleware
-from infrastructure.bus.impl.event.message import RawEvent
-from infrastructure.bus.impl.event.repository import EventHandlerRepository
+from infrastructure.bus.event.message import RawEvent
+from infrastructure.bus.event.repository import EventHandlerRepository
 
 
 class EventConstructorMiddleware(MessageHandlerMiddleware[None]):
@@ -27,6 +27,6 @@ class EventConstructorMiddleware(MessageHandlerMiddleware[None]):
             if not event_class:
                 return
 
-            message = event_class.model_validate(message.payload)
+            message = event_class.model_validate(message.data)
 
         await next_(message)

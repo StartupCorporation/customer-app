@@ -2,8 +2,8 @@ from sqlalchemy import select
 
 from application.queries.get_category_products.query import GetCategoryProductsQuery
 from application.queries.get_category_products.result import GetCategoryProductsQueryResult, CategoryProduct
-from infrastructure.bus.impl.query.handler import QueryHandler
-from infrastructure.database.relational.connection import AsyncSQLDatabaseConnectionManager
+from infrastructure.bus.query.handler import QueryHandler
+from infrastructure.database.relational.connection import SQLDatabaseConnectionManager
 from infrastructure.database.relational.models.product import Product
 
 
@@ -11,7 +11,7 @@ class GetCategoryProductsQueryHandler(QueryHandler[GetCategoryProductsQueryResul
 
     def __init__(
         self,
-        connection_manager: AsyncSQLDatabaseConnectionManager,
+        connection_manager: SQLDatabaseConnectionManager,
     ):
         self._connection_manager = connection_manager
 
@@ -19,7 +19,7 @@ class GetCategoryProductsQueryHandler(QueryHandler[GetCategoryProductsQueryResul
         self,
         message: GetCategoryProductsQuery,
     ) -> GetCategoryProductsQueryResult:
-        async with self._connection_manager.connect() as session:
+        async with self._connection_manager.session() as session:
             stmt = select(
                 Product.id,
                 Product.name,

@@ -1,7 +1,7 @@
 from typing import AsyncIterator
 
 from infrastructure.message_broker.base.manager import MessageBrokerManager
-from infrastructure.message_broker.impl.rabbitmq.connection import RabbitMQConnectionManager
+from infrastructure.message_broker.rabbitmq.connection import RabbitMQConnectionManager
 
 
 class RabbitMQManager(MessageBrokerManager):

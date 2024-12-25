@@ -2,9 +2,9 @@ from typing import Callable, Awaitable, Iterable
 
 from infrastructure.bus.base.bus import MessageBus
 from infrastructure.bus.base.middleware import MessageHandlerMiddleware
-from infrastructure.bus.impl.command.exception.command_handler_doesnt_exist import CommandHandlerDoesNotExist
-from infrastructure.bus.impl.command.handler import CommandHandler
-from infrastructure.bus.impl.command.message import Command
+from infrastructure.bus.command.exception.command_handler_doesnt_exist import CommandHandlerDoesNotExist
+from infrastructure.bus.command.handler import CommandHandler
+from infrastructure.bus.command.message import Command
 
 
 class CommandBus(MessageBus[None]):

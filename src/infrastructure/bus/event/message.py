@@ -13,4 +13,4 @@ class Event(Message, ABC):
 
 class RawEvent(Message):
     event_name: str
-    payload: dict
+    data: dict

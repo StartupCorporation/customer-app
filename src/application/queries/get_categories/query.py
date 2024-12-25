@@ -1,4 +1,4 @@
-from infrastructure.bus.impl.query.message import Query
+from infrastructure.bus.query.message import Query
 
 
 class GetCategoriesQuery(Query):

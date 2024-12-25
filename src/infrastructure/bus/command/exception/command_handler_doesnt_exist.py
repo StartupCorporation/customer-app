@@ -1,4 +1,4 @@
-from infrastructure.bus.impl.command.exception.base import CommandBusException
+from infrastructure.bus.command.exception.base import CommandBusException
 
 
 class CommandHandlerDoesNotExist(CommandBusException):

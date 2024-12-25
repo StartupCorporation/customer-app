@@ -1,4 +1,4 @@
-from infrastructure.bus.impl.event.exception.base import EventBusException
+from infrastructure.bus.event.exception.base import EventBusException
 
 
 class EventNameDuplication(EventBusException):

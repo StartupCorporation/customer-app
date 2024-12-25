@@ -46,16 +46,16 @@ export POSTGRES_DB=database  # The database name in the database container
 ## ==== RABBITMQ
 export RABBITMQ_DEFAULT_USER=dev  # User's name that will be created in the rabbitmq container
 export RABBITMQ_DEFAULT_PASS=devdev  # User's password that will be created in the rabbitmq container
+export RABBITMQ_COMMENTS_QUEUE=comments-queue  # RabbitMQ comments queue name
+export RABBITMQ_PRODUCTS_QUEUE=products-queue  # RabbitMQ products queue name
+export RABBITMQ_ORDERS_QUEUE=orders-queue  # RabbitMQ orders queue name
+export RABBITMQ_CATEGORY_QUEUE=category-queue  # RabbitMQ category queue name
 
 ## ==== RABBITMQ SETUP
-export RABBITMQ_SETUP_RABBIT_HOST=rabbitmq  # RabbitMQ host to connect
-export RABBITMQ_SETUP_RABBIT_PORT=15672  # RabbitMQ port to connect
-export RABBITMQ_SETUP_RABBIT_USERNAME=dev  # User's name to connect
-export RABBITMQ_SETUP_RABBIT_PASSWORD=devdev  # User's password to connect
-export RABBITMQ_SETUP_RABBIT_COMMENTS_QUEUE=comments-message_broker  # Comments message_broker name
-export RABBITMQ_SETUP_RABBIT_PRODUCTS_QUEUE=products-message_broker  # Products message_broker name
-export RABBITMQ_SETUP_RABBIT_ORDERS_QUEUE=orders-message_broker  # Orders message_broker name
-export RABBITMQ_SETUP_RABBIT_CATEGORY_QUEUE=category-message_broker  # Category message_broker name
+export SETUP_RABBITMQ_HOST=rabbitmq  # RabbitMQ host to connect
+export SETUP_RABBITMQ_PORT=15672  # RabbitMQ port to connect
+export SETUP_RABBITMQ_USERNAME=dev  # User's name to connect
+export SETUP_RABBITMQ_PASSWORD=devdev  # User's password to connect
 
 ## ==== APPLICATION
 export WEB_APPLICATION_PORT=8000  # What port is listening by the customer application
@@ -89,10 +89,6 @@ export RABBITMQ_USERNAME=dev  # RabbitMQ User's name to connect
 export RABBITMQ_PASSWORD=devdev  # RabbitMQ User's password to connect
 export RABBITMQ_HOST=rabbitmq  # RabbitMQ host to connect
 export RABBITMQ_PORT=5672  # RabbitMQ port to connect
-export RABBITMQ_COMMENTS_QUEUE=comments-message_broker  # RabbitMQ Comments message_broker name
-export RABBITMQ_PRODUCTS_QUEUE=products-message_broker  # RabbitMQ Products message_broker name
-export RABBITMQ_ORDERS_QUEUE=orders-message_broker  # RabbitMQ Orders message_broker name
-export RABBITMQ_CATEGORY_QUEUE=category-message_broker  # RabbitMQ Category message_broker name
 ```
 
 ## CLI Commands

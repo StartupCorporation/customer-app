@@ -1,8 +1,8 @@
 from collections import defaultdict
 
-from infrastructure.bus.impl.event.exception.event_name_duplication import EventNameDuplication
-from infrastructure.bus.impl.event.handler import EventHandler
-from infrastructure.bus.impl.event.message import Event
+from infrastructure.bus.event.exception.event_name_duplication import EventNameDuplication
+from infrastructure.bus.event.handler import EventHandler
+from infrastructure.bus.event.message import Event
 
 
 class EventHandlerRepository:

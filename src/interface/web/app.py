@@ -3,7 +3,7 @@ from typing import Iterable, Awaitable, Callable
 from fastapi import FastAPI, Request, APIRouter, HTTPException, status
 
 from application.exception.base import NotFound, ApplicationException
-from application.module import ApplicationModule
+from application.layer import ApplicationLayer
 from domain.layer import DomainLayer
 from infrastructure.di.container import Container
 from infrastructure.di.layer import Layer
@@ -78,7 +78,7 @@ web_app = WebApplication(
     layers=(
         InfrastructureLayer(),
         DomainLayer(),
-        ApplicationModule(),
+        ApplicationLayer(),
     ),
     routes=(
         category_router,

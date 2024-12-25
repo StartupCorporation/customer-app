@@ -1,6 +1,6 @@
 from pydantic import UUID4
 
-from infrastructure.bus.impl.event.message import Event
+from infrastructure.bus.event.message import Event
 
 
 class CategoryDeletedEvent(Event):

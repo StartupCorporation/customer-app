@@ -2,9 +2,9 @@ from typing import Callable, Awaitable, Iterable
 
 from infrastructure.bus.base.bus import MessageBus
 from infrastructure.bus.base.middleware import MessageHandlerMiddleware
-from infrastructure.bus.impl.event.handler import EventHandler
-from infrastructure.bus.impl.event.message import Event
-from infrastructure.bus.impl.event.repository import EventHandlerRepository
+from infrastructure.bus.event.handler import EventHandler
+from infrastructure.bus.event.message import Event
+from infrastructure.bus.event.repository import EventHandlerRepository
 
 
 class EventBus(MessageBus[None]):

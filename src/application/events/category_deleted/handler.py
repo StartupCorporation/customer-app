@@ -1,6 +1,6 @@
 from application.events.category_deleted.event import CategoryDeletedEvent
 from domain.repository.category import CategoryRepository
-from infrastructure.bus.impl.event.handler import EventHandler
+from infrastructure.bus.event.handler import EventHandler
 
 
 class CategoryDeletedEventHandler(EventHandler):

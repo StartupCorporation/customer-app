@@ -3,8 +3,8 @@ from typing import Annotated
 
 from typer import Argument, Typer, Context
 
-from infrastructure.bus.impl.event.bus import EventBus
-from infrastructure.bus.impl.event.message import RawEvent
+from infrastructure.bus.event.bus import EventBus
+from infrastructure.bus.event.message import RawEvent
 from infrastructure.message_broker.base.manager import MessageBrokerManager
 
 

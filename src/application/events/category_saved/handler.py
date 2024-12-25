@@ -2,7 +2,7 @@ from application.events.category_saved.event import CategorySavedEvent
 from domain.entities.category import Category
 from domain.repository.category import CategoryRepository
 from domain.service.category import CategoryService
-from infrastructure.bus.impl.event.handler import EventHandler
+from infrastructure.bus.event.handler import EventHandler
 
 
 class CategorySavedEventHandler(EventHandler):
@@ -25,7 +25,7 @@ class CategorySavedEventHandler(EventHandler):
 
         if category:
             category.set_image(
-                image=message.image_link,
+                image=message.image,
             )
             category.set_name(
                 name=message.name,
@@ -38,7 +38,7 @@ class CategorySavedEventHandler(EventHandler):
                 id=self._category_service.generate_id(),
                 name=message.name,
                 description=message.description,
-                image=message.image_link,
+                image=message.image,
                 external_id=message.id,
                 products=[],
             )

@@ -52,7 +52,7 @@ services:
       <<: *app-environment-variables
       PYTHONPATH: "/app/"
     entrypoint: [
-      "python", "interface/cli/app.py", "queue", "consume", "${RABBITMQ_SETUP_RABBIT_CATEGORY_QUEUE}"
+      "python", "interface/cli/app.py", "queue", "consume", "${RABBITMQ_CATEGORY_QUEUE}"
     ]
 
   rabbitmq:
@@ -71,7 +71,7 @@ services:
       test: rabbitmq-diagnostics check_port_connectivity
       interval: 1s
       timeout: 10s
-      retries: 10
+      retries: 15
 
   rabbit-mq-setup:
     image: alpine
@@ -80,15 +80,15 @@ services:
       - |
         apk -q add curl python3
 
-        curl --no-progress-meter -s -o /usr/local/bin/rabbitmqadmin http://${RABBITMQ_SETUP_RABBIT_HOST}:${RABBITMQ_SETUP_RABBIT_PORT}/cli/rabbitmqadmin
+        curl --no-progress-meter -s -o /usr/local/bin/rabbitmqadmin http://${SETUP_RABBITMQ_HOST}:${SETUP_RABBITMQ_PORT}/cli/rabbitmqadmin
         chmod +x /usr/local/bin/rabbitmqadmin
 
-        alias rabbitmqadmin="rabbitmqadmin --host=${RABBITMQ_SETUP_RABBIT_HOST} --port=${RABBITMQ_SETUP_RABBIT_PORT} --username=${RABBITMQ_SETUP_RABBIT_USERNAME} --password=${RABBITMQ_SETUP_RABBIT_PASSWORD}"
+        alias rabbitmqadmin="rabbitmqadmin --host=${SETUP_RABBITMQ_HOST} --port=${SETUP_RABBITMQ_PORT} --username=${SETUP_RABBITMQ_USERNAME} --password=${SETUP_RABBITMQ_PASSWORD}"
 
-        rabbitmqadmin -q declare queue name=${RABBITMQ_SETUP_RABBIT_COMMENTS_QUEUE} durable=true
-        rabbitmqadmin -q declare queue name=${RABBITMQ_SETUP_RABBIT_PRODUCTS_QUEUE} durable=true
-        rabbitmqadmin -q declare queue name=${RABBITMQ_SETUP_RABBIT_ORDERS_QUEUE} durable=true
-        rabbitmqadmin -q declare queue name=${RABBITMQ_SETUP_RABBIT_CATEGORY_QUEUE} durable=true
+        rabbitmqadmin -q declare queue name=${RABBITMQ_COMMENTS_QUEUE} durable=true
+        rabbitmqadmin -q declare queue name=${RABBITMQ_PRODUCTS_QUEUE} durable=true
+        rabbitmqadmin -q declare queue name=${RABBITMQ_ORDERS_QUEUE} durable=true
+        rabbitmqadmin -q declare queue name=${RABBITMQ_CATEGORY_QUEUE} durable=true
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -108,7 +108,7 @@ services:
       test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
       interval: 1s
       timeout: 10s
-      retries: 10
+      retries: 15
 
 volumes:
   customer_app_db:

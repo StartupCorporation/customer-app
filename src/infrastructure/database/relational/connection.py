@@ -15,7 +15,7 @@ from sqlalchemy.ext.asyncio import (
 from infrastructure.settings.database import DatabaseSettings
 
 
-class AsyncSQLDatabaseConnectionManager:
+class SQLDatabaseConnectionManager:
 
     def __init__(
         self,
@@ -24,8 +24,18 @@ class AsyncSQLDatabaseConnectionManager:
         self._settings = settings
 
     @asynccontextmanager
-    async def connect(self) -> AsyncContextManager[AsyncSession]:
-        yield self._session()
+    async def session(self) -> AsyncContextManager[AsyncSession]:
+        explicit_session_key = "explicit_session"
+        session = self._session()
+        explicit_session = session.info.get(explicit_session_key, False)
+        session.info[explicit_session_key] = True
+
+        try:
+            yield session
+        finally:
+            if not explicit_session:
+                await session.close()
+                del session.info[explicit_session_key]
 
     @cached_property
     def _engine(self) -> AsyncEngine:

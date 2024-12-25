@@ -1,4 +1,4 @@
-from infrastructure.bus.impl.query.exception.base import QueryBusException
+from infrastructure.bus.query.exception.base import QueryBusException
 
 
 class QueryHandlerDoesNotExist(QueryBusException):

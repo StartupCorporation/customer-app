@@ -2,7 +2,7 @@ from typing import Iterable
 
 from typer import Typer, Context
 
-from application.module import ApplicationModule
+from application.layer import ApplicationLayer
 from domain.layer import DomainLayer
 from infrastructure.di.container import Container
 from infrastructure.di.layer import Layer
@@ -55,7 +55,7 @@ app = CLIApplication(
     layers=(
         InfrastructureLayer(),
         DomainLayer(),
-        ApplicationModule(),
+        ApplicationLayer(),
     ),
     command_apps=(
         queue_app,
