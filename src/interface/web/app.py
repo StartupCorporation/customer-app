@@ -3,10 +3,11 @@ from typing import Iterable, Awaitable, Callable
 from fastapi import FastAPI, Request, APIRouter, HTTPException, status
 
 from application.exception.base import NotFound, ApplicationException
-from application.module import ApplicationModule
+from application.layer import ApplicationLayer
+from domain.layer import DomainLayer
 from infrastructure.di.container import Container
 from infrastructure.di.layer import Layer
-from infrastructure.module import InfrastructureModule
+from infrastructure.layer import InfrastructureLayer
 from infrastructure.settings.application import ApplicationSettings
 from interface.web.routes.category.routes import router as category_router
 
@@ -15,31 +16,38 @@ class WebApplication:
 
     def __init__(
         self,
-        modules: Iterable[Layer],
+        layers: Iterable[Layer],
         routes: Iterable[APIRouter],
     ):
         self._container = Container()
-        self._modules = modules
-        self._setup_modules()
+        self._setup_layers(
+            layers=layers,
+        )
         self._app = self._create_application(
             routes=routes,
         )
 
-    def _setup_modules(self):
-        for module in self._modules:
-            module.setup(container=self._container)
+    def _setup_layers(
+        self,
+        layers: Iterable[Layer],
+    ) -> None:
+        for layer in layers:
+            layer.setup(container=self._container)
 
     def _create_application(
         self,
         routes: Iterable[APIRouter],
     ) -> FastAPI:
-        app_settings = self._container[ApplicationSettings]
+        settings = self._container[ApplicationSettings]
+
         app = FastAPI(
-            title="Customer Microservice Application",
-            debug=app_settings.DEBUG,
-            description=app_settings.DESCRIPTION,
-            version=app_settings.VERSION,
+            title=settings.TITLE,
+            debug=settings.DEBUG,
+            version=settings.VERSION,
+            description=f"**{settings.TITLE}** OpenAPI documentation.",
+            docs_url="/docs" if settings.DEBUG else None,
         )
+
         for route in routes:
             app.include_router(route)
 
@@ -74,9 +82,10 @@ class WebApplication:
 
 
 web_app = WebApplication(
-    modules=(
-        InfrastructureModule(),
-        ApplicationModule(),
+    layers=(
+        InfrastructureLayer(),
+        DomainLayer(),
+        ApplicationLayer(),
     ),
     routes=(
         category_router,

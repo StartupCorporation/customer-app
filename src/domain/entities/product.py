@@ -14,6 +14,7 @@ class Product(Entity[UUID]):
     quantity: int
     characteristics: dict
     images: list[str]
+    external_id: UUID
 
     comments: list["Comment"]
 

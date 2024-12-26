@@ -8,16 +8,16 @@ from application.queries.get_product_details.result import (
     ProductDetailsComment,
 )
 from infrastructure.bus.query.handler import QueryHandler
-from infrastructure.database.connection import AsyncSQLDatabaseConnectionManager
-from infrastructure.database.models.comment import ProductComment
-from infrastructure.database.models.product import Product
+from infrastructure.database.relational.connection import SQLDatabaseConnectionManager
+from infrastructure.database.relational.models.comment import ProductComment
+from infrastructure.database.relational.models.product import Product
 
 
 class GetProductDetailsQueryHandler(QueryHandler[GetProductDetailsQueryResult]):
 
     def __init__(
         self,
-        connection_manager: AsyncSQLDatabaseConnectionManager,
+        connection_manager: SQLDatabaseConnectionManager,
     ):
         self._connection_manager = connection_manager
 
@@ -25,7 +25,7 @@ class GetProductDetailsQueryHandler(QueryHandler[GetProductDetailsQueryResult]):
         self,
         message: GetProductDetailsQuery,
     ) -> GetProductDetailsQueryResult:
-        async with self._connection_manager.connect() as session:
+        async with self._connection_manager.session() as session:
             product_stmt = select(
                 Product.name,
                 Product.description,

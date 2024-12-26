@@ -13,7 +13,7 @@ class CommandBus(MessageBus[None]):
         self,
         middlewares: Iterable[MessageHandlerMiddleware] | None = None,
     ):
-        self._handlers = {}
+        self._handlers: list[type[Command]: CommandHandler] = {}
         self._middleware_chain: Callable[[Command], Awaitable[None]] = self._build_middleware_chain(
             middlewares=middlewares or [],
         )
@@ -45,7 +45,7 @@ class CommandBus(MessageBus[None]):
             async def wrapped_handler(message: Command) -> None:
                 return await middleware(
                     message=message,
-                    next_=next_handler,
+                    next_=next_handler,  # type: ignore
                 )
 
             return wrapped_handler

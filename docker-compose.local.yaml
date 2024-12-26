@@ -1,24 +1,41 @@
 version: '3.9'
 
+x-app-setup: &app-setup
+  image: 'customer-app:latest'
+  build:
+    context: .
+    args:
+      GROUP_ID: "${GROUP_ID}"
+      USER_ID: "${USER_ID}"
+    dockerfile: Dockerfile
+  restart: always
+  environment:
+    APPLICATION_TITLE: ${APPLICATION_TITLE}
+    APPLICATION_DEBUG: ${APPLICATION_DEBUG}
+    APPLICATION_VERSION: ${APPLICATION_VERSION}
+
+    DATABASE_HOST: ${DATABASE_HOST}
+    DATABASE_PORT: ${DATABASE_PORT}
+    DATABASE_DATABASE: ${DATABASE_DATABASE}
+    DATABASE_USERNAME: ${DATABASE_USERNAME}
+    DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+
+    RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
+    RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+    RABBITMQ_HOST: ${RABBITMQ_HOST}
+    RABBITMQ_PORT: ${RABBITMQ_PORT}
+  depends_on:
+    database:
+      condition: service_healthy
+    rabbit-mq-setup:
+      condition: service_completed_successfully
+  volumes:
+    - ./src:/app
+
 services:
 
-  app:
-    image: 'customer-app:latest'
-    build:
-      context: .
-      args:
-        GROUP_ID: "${GROUP_ID}"
-        USER_ID: "${USER_ID}"
-      dockerfile: Dockerfile
-    environment:
-      - "APPLICATION_DEBUG=${APPLICATION_DEBUG}"
-      - "APPLICATION_VERSION=${APPLICATION_VERSION}"
-      - "APPLICATION_DESCRIPTION=${APPLICATION_DESCRIPTION}"
-      - "DATABASE_HOST=${DATABASE_HOST}"
-      - "DATABASE_PORT=${DATABASE_PORT}"
-      - "DATABASE_DATABASE=${DATABASE_DATABASE}"
-      - "DATABASE_USERNAME=${DATABASE_USERNAME}"
-      - "DATABASE_PASSWORD=${DATABASE_PASSWORD}"
+  web-app:
+    <<: *app-setup
     ports:
       - '${DOCKER_APPLICATION_EXPOSE_PORT}:${WEB_APPLICATION_PORT}'
     entrypoint: [
@@ -28,15 +45,70 @@ services:
       "--factory",
       "--reload",
     ]
-    depends_on:
-      database:
-        condition: service_healthy
-    volumes:
-      - ./src:/app
 
+  category-queue-consumer:
+    <<: *app-setup
+    entrypoint: [
+      "faststream", "run",
+      "--reload",
+      "--factory",
+      "interface.queue.app:queue_app",
+    ]
+
+  asyncapi-docs:
+    <<: *app-setup
+    entrypoint: [
+      "faststream", "docs", "serve",
+      "--host", "0.0.0.0",
+      "--port", "${ASYNCAPI_DOCS_PORT}",
+      "--reload",
+      "--factory",
+      "interface.queue.app:queue_app",
+    ]
+    ports:
+      - "${DOCKER_ASYNCAPI_EXPOSE_PORT}:${ASYNCAPI_DOCS_PORT}"
+
+  rabbitmq:
+    image: rabbitmq:4.0.5-management
+    hostname: rabbitmq
+    ports:
+      - '${DOCKER_RABBITMQ_EXPOSE_PORT}:15672'
+    restart: always
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    environment:
+      - "RABBITMQ_DEFAULT_USER=dev"
+      - "RABBITMQ_DEFAULT_PASS=devdev"
+      - "RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit log_levels [{connection,error},{default,error}]"
+    healthcheck:
+      test: rabbitmq-diagnostics check_port_connectivity
+      interval: 1s
+      timeout: 10s
+      retries: 15
+
+  rabbit-mq-setup:
+    image: alpine
+    entrypoint: [ "sh","-c" ]
+    command:
+      - |
+        apk -q add curl python3
+
+        curl --no-progress-meter -s -o /usr/local/bin/rabbitmqadmin http://${SETUP_RABBITMQ_HOST}:${SETUP_RABBITMQ_PORT}/cli/rabbitmqadmin
+        chmod +x /usr/local/bin/rabbitmqadmin
+
+        alias rabbitmqadmin="rabbitmqadmin --host=${SETUP_RABBITMQ_HOST} --port=${SETUP_RABBITMQ_PORT} --username=${SETUP_RABBITMQ_USERNAME} --password=${SETUP_RABBITMQ_PASSWORD}"
+
+        rabbitmqadmin -q declare queue name=${RABBITMQ_COMMENTS_QUEUE} durable=true
+        rabbitmqadmin -q declare queue name=${RABBITMQ_PRODUCTS_QUEUE} durable=true
+        rabbitmqadmin -q declare queue name=${RABBITMQ_ORDERS_QUEUE} durable=true
+        rabbitmqadmin -q declare queue name=${RABBITMQ_CATEGORY_QUEUE} durable=true
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
 
   database:
     image: 'postgres:latest'
+    restart: always
     environment:
       - "POSTGRES_USER=${POSTGRES_USER}"
       - "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}"
@@ -47,9 +119,10 @@ services:
       - customer_app_db:/var/lib/postgresql/data/
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
-      interval: 5s
-      timeout: 5s
-      retries: 3
+      interval: 1s
+      timeout: 10s
+      retries: 15
 
 volumes:
   customer_app_db:
+  rabbitmq_data:

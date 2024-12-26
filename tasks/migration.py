@@ -13,7 +13,7 @@ def _change_to_migrations_root(ctx):
     """
     Internal pre-task to change working directory to the database migrations directory.
     """
-    os.chdir(Path() / "src" / "infrastructure" / "database" / "migrations")
+    os.chdir(Path() / "src" / "infrastructure" / "database" / "relational" / "migrations")
 
 
 @task(

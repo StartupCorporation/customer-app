@@ -6,6 +6,6 @@ class ApplicationSettings(BaseSettings):
         env_prefix="APPLICATION_",
     )
 
+    TITLE: str
     DEBUG: bool
-    DESCRIPTION: str
     VERSION: str

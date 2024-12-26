@@ -7,7 +7,7 @@ from tasks.shared import _change_to_root_dir
     name="compile",
     help={
         "extra": "The additional packages section to install.",
-        "output_file": "The output file where compiled packages will be written.",
+        "output_file": "The output file where compiled packages will be written. Default is 'requirements.local.txt'.",
     },
     optional=['extra'],
     pre=[_change_to_root_dir],
@@ -39,7 +39,7 @@ def compile_(
 
 @task(
     help={
-        "file": "The file containing the packages to install.",
+        "file": "The file containing the packages to install. Default is 'requirements.local.txt'.",
     },
     pre=[_change_to_root_dir],
 )
