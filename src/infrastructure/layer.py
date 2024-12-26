@@ -2,8 +2,6 @@ from domain.repository.category import CategoryRepository
 from domain.repository.product import ProductRepository
 from infrastructure.bus.command.bus import CommandBus
 from infrastructure.bus.event.bus import EventBus
-from infrastructure.bus.event.middleware.event_constructor import EventConstructorMiddleware
-from infrastructure.bus.event.repository import EventHandlerRepository
 from infrastructure.bus.middleware.transaction import TransactionMiddleware
 from infrastructure.bus.query.bus import QueryBus
 from infrastructure.database.relational.connection import SQLDatabaseConnectionManager
@@ -38,13 +36,8 @@ class InfrastructureLayer(Layer):
             connection_manager=container[SQLDatabaseConnectionManager],
         )
 
-        container[EventHandlerRepository] = EventHandlerRepository()
-
         container[TransactionMiddleware] = TransactionMiddleware(
             transaction_manager=container[SQLDatabaseTransactionManager],
-        )
-        container[EventConstructorMiddleware] = EventConstructorMiddleware(
-            event_handler_repository=container[EventHandlerRepository],
         )
 
         container[CommandBus] = CommandBus(
@@ -54,9 +47,7 @@ class InfrastructureLayer(Layer):
         )
         container[QueryBus] = QueryBus()
         container[EventBus] = EventBus(
-            event_handler_repository=container[EventHandlerRepository],
             middlewares=(
-                container[EventConstructorMiddleware],
                 container[TransactionMiddleware],
             ),
         )

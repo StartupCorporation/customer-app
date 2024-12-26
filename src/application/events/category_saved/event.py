@@ -4,12 +4,7 @@ from infrastructure.bus.event.message import Event
 
 
 class CategorySavedEvent(Event):
-    id: UUID4
+    external_id: UUID4
     name: str
     description: str
     image: str
-
-    @classmethod
-    @property
-    def __event_name__(cls) -> str:
-        return "CATEGORY_SAVED"

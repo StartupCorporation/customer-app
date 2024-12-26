@@ -20,27 +20,34 @@ class WebApplication:
         routes: Iterable[APIRouter],
     ):
         self._container = Container()
-        self._layers = layers
-        self._setup_modules()
+        self._setup_layers(
+            layers=layers,
+        )
         self._app = self._create_application(
             routes=routes,
         )
 
-    def _setup_modules(self):
-        for module in self._layers:
-            module.setup(container=self._container)
+    def _setup_layers(
+        self,
+        layers: Iterable[Layer],
+    ) -> None:
+        for layer in layers:
+            layer.setup(container=self._container)
 
     def _create_application(
         self,
         routes: Iterable[APIRouter],
     ) -> FastAPI:
-        app_settings = self._container[ApplicationSettings]
+        settings = self._container[ApplicationSettings]
+
         app = FastAPI(
-            title="Customer Microservice Application",
-            debug=app_settings.DEBUG,
-            description=app_settings.DESCRIPTION,
-            version=app_settings.VERSION,
+            title=settings.TITLE,
+            debug=settings.DEBUG,
+            version=settings.VERSION,
+            description=f"**{settings.TITLE}** OpenAPI documentation.",
+            docs_url="/docs" if settings.DEBUG else None,
         )
+
         for route in routes:
             app.include_router(route)
 

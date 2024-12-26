@@ -7,8 +7,9 @@ src/customer_app.egg-info/
 src/infrastructure/database/relational/migrations
 src/infrastructure/settings/alembic.py
 
-.gitignore
 .env.local
+.gitignore
+.pre-commit-config.yaml
 docker-compose.local.yaml
 Dockerfile
 pyproject.toml

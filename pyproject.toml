@@ -11,7 +11,7 @@ dependencies = [
     "uvicorn",
     "asyncpg",
     "typer",
-    "aio-pika",
+    "faststream[rabbit,cli]",
 ]
 
 [project.optional-dependencies]

@@ -20,7 +20,7 @@ class CategorySavedEventHandler(EventHandler):
         message: CategorySavedEvent,
     ) -> None:
         category = await self._category_repository.get_by_external_id(
-            id_=message.id,
+            id_=message.external_id,
         )
 
         if category:
@@ -39,7 +39,7 @@ class CategorySavedEventHandler(EventHandler):
                 name=message.name,
                 description=message.description,
                 image=message.image,
-                external_id=message.id,
+                external_id=message.external_id,
                 products=[],
             )
 

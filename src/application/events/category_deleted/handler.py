@@ -16,7 +16,7 @@ class CategoryDeletedEventHandler(EventHandler):
         message: CategoryDeletedEvent,
     ) -> None:
         category = await self._category_repository.get_by_external_id(
-            id_=message.id,
+            id_=message.external_id,
         )
 
         if not category:

@@ -9,10 +9,10 @@ x-app-setup: &app-setup
       USER_ID: "${USER_ID}"
     dockerfile: Dockerfile
   restart: always
-  environment: &app-environment-variables
+  environment:
+    APPLICATION_TITLE: ${APPLICATION_TITLE}
     APPLICATION_DEBUG: ${APPLICATION_DEBUG}
     APPLICATION_VERSION: ${APPLICATION_VERSION}
-    APPLICATION_DESCRIPTION: ${APPLICATION_DESCRIPTION}
 
     DATABASE_HOST: ${DATABASE_HOST}
     DATABASE_PORT: ${DATABASE_PORT}
@@ -48,12 +48,25 @@ services:
 
   category-queue-consumer:
     <<: *app-setup
-    environment:
-      <<: *app-environment-variables
-      PYTHONPATH: "/app/"
     entrypoint: [
-      "python", "interface/cli/app.py", "queue", "consume", "${RABBITMQ_CATEGORY_QUEUE}"
+      "faststream", "run",
+      "--reload",
+      "--factory",
+      "interface.queue.app:queue_app",
     ]
+
+  asyncapi-docs:
+    <<: *app-setup
+    entrypoint: [
+      "faststream", "docs", "serve",
+      "--host", "0.0.0.0",
+      "--port", "${ASYNCAPI_DOCS_PORT}",
+      "--reload",
+      "--factory",
+      "interface.queue.app:queue_app",
+    ]
+    ports:
+      - "${DOCKER_ASYNCAPI_EXPOSE_PORT}:${ASYNCAPI_DOCS_PORT}"
 
   rabbitmq:
     image: rabbitmq:4.0.5-management
