@@ -7,13 +7,19 @@ from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from infrastructure.database.relational.models.base import Base
-from infrastructure.settings.alembic import AlembicSettings
+from infrastructure.di.container import Container
+from infrastructure.layer import InfrastructureLayer
+from infrastructure.settings.database import DatabaseSettings
 
 
+container = Container()
+InfrastructureLayer().setup(container)
 
-settings = AlembicSettings()
 config = context.config
-config.set_main_option('sqlalchemy.url', settings.db_url)
+config.set_main_option(
+    'sqlalchemy.url',
+    container[DatabaseSettings].get_database_url("postgresql+asyncpg"),
+)
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)

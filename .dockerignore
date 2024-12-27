@@ -4,8 +4,6 @@
 venv/
 tasks/
 src/customer_app.egg-info/
-src/infrastructure/database/relational/migrations
-src/infrastructure/settings/alembic.py
 
 .env.local
 .gitignore

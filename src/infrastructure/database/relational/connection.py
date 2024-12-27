@@ -3,7 +3,6 @@ from contextlib import asynccontextmanager
 from functools import cached_property
 from typing import AsyncContextManager
 
-from sqlalchemy import URL
 from sqlalchemy.ext.asyncio import (
     AsyncSession,
     AsyncEngine,
@@ -39,16 +38,7 @@ class SQLDatabaseConnectionManager:
 
     @cached_property
     def _engine(self) -> AsyncEngine:
-        return create_async_engine(
-            URL.create(
-                drivername="postgresql+asyncpg",
-                username=self._settings.USERNAME,
-                password=self._settings.PASSWORD,
-                database=self._settings.DATABASE,
-                host=self._settings.HOST,
-                port=self._settings.PORT,
-            ),
-        )
+        return create_async_engine(self._settings.get_database_url("postgresql+asyncpg"))
 
     @cached_property
     def _session_factory(self) -> async_sessionmaker[AsyncSession]:

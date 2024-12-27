@@ -8,7 +8,6 @@ x-app-setup: &app-setup
       GROUP_ID: "${GROUP_ID}"
       USER_ID: "${USER_ID}"
     dockerfile: Dockerfile
-  restart: always
   environment:
     APPLICATION_TITLE: ${APPLICATION_TITLE}
     APPLICATION_DEBUG: ${APPLICATION_DEBUG}
@@ -25,8 +24,8 @@ x-app-setup: &app-setup
     RABBITMQ_HOST: ${RABBITMQ_HOST}
     RABBITMQ_PORT: ${RABBITMQ_PORT}
   depends_on:
-    database:
-      condition: service_healthy
+    migration-service:
+      condition: service_completed_successfully
     rabbit-mq-setup:
       condition: service_completed_successfully
   volumes:
@@ -54,6 +53,13 @@ services:
       "--factory",
       "interface.queue.app:queue_app",
     ]
+
+  migration-service:
+    <<: *app-setup
+    command: sh -c 'cd infrastructure/database/relational/migrations && alembic upgrade head'
+    depends_on:
+      database:
+        condition: service_healthy
 
   asyncapi-docs:
     <<: *app-setup

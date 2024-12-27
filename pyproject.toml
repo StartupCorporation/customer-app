@@ -12,6 +12,7 @@ dependencies = [
     "asyncpg",
     "typer",
     "faststream[rabbit,cli]",
+    "alembic",
 ]
 
 [project.optional-dependencies]
@@ -19,7 +20,6 @@ local = [
     "pytest",
     "ipython",
     "invoke",
-    "alembic",
     "ruff",
     "pre-commit",
 ]

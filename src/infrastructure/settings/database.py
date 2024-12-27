@@ -11,3 +11,9 @@ class DatabaseSettings(BaseSettings):
     DATABASE: str
     USERNAME: str
     PASSWORD: str
+
+    def get_database_url(
+        self,
+        driver: str,
+    ) -> str:
+        return f"{driver}://{self.USERNAME}:{self.PASSWORD}@{self.HOST}:{self.PORT}/{self.DATABASE}"

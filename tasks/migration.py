@@ -1,23 +1,10 @@
-import os
-from pathlib import Path
-
 from invoke import task, Context
 
-from tasks.shared import _change_to_root_dir
+from tasks.shared import _change_to_root_dir, get_user_group_id
 
 
 @task(
     pre=[_change_to_root_dir],
-)
-def _change_to_migrations_root(ctx):
-    """
-    Internal pre-task to change working directory to the database migrations directory.
-    """
-    os.chdir(Path() / "src" / "infrastructure" / "database" / "relational" / "migrations")
-
-
-@task(
-    pre=[_change_to_migrations_root],
 )
 def run(
     context: Context,
@@ -25,11 +12,16 @@ def run(
     """
     Runs all existing migration files.
     """
-    context.run("alembic upgrade head")
+    uid, gid = get_user_group_id(context=context)
+    context.run(
+        f"export GROUP_ID={gid} && export USER_ID={uid} && "
+        "docker compose -f docker-compose.local.yaml restart migration-service",
+        hide=True,
+    )
 
 
 @task(
-    pre=[_change_to_migrations_root],
+    pre=[_change_to_root_dir],
 )
 def autogenerate(
     context: Context,
@@ -37,4 +29,10 @@ def autogenerate(
     """
     Autogenerate a new migration file.
     """
-    context.run("alembic revision --autogenerate")
+    uid, gid = get_user_group_id(context=context)
+    context.run(
+        f"export GROUP_ID={gid} && export USER_ID={uid} && "
+        "docker compose -f docker-compose.local.yaml run migration-service "
+        "sh -c 'cd infrastructure/database/relational/migrations && alembic revision --autogenerate'",
+        hide=True,
+    )

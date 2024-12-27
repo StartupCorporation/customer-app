@@ -82,13 +82,6 @@ export DATABASE_DATABASE=customer_app  # The database name to which application 
 export DATABASE_USERNAME=dev  # The database user to connect
 export DATABASE_PASSWORD=devdev  # The database user's password to connect
 
-## ==== ALEMBIC
-export ALEMBIC_HOST=localhost  # Host to connect to the database from the host machine
-export ALEMBIC_PORT=6543  # Port number to connect to the database
-export ALEMBIC_DATABASE=customer_app  # The database name to which alembic is connecting
-export ALEMBIC_USERNAME=dev  # The database user to connect
-export ALEMBIC_PASSWORD=devdev  # The database user's password to connect
-
 ## ==== RABBITMQ
 export RABBITMQ_USERNAME=dev  # RabbitMQ User's name to connect
 export RABBITMQ_PASSWORD=devdev  # RabbitMQ User's password to connect
@@ -123,7 +116,6 @@ Handles logic of creating & applying database migrations files:
 $ inv migration.run  # Applies migration files
 $ inv migration.autogenerate  # Generates new migration file with the latest model changes
 ```
-
 
 
 ## Development Flow
