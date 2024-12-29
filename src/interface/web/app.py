@@ -1,6 +1,7 @@
 from typing import Iterable, Awaitable, Callable
 
 from fastapi import FastAPI, Request, APIRouter, HTTPException, status
+from fastapi.middleware.cors import CORSMiddleware
 
 from application.exception.base import NotFound, ApplicationException
 from application.layer import ApplicationLayer
@@ -58,6 +59,14 @@ class WebApplication:
         ) -> T:
             request.state.container = self._container
             return await call_next(request)
+
+        app.add_middleware(
+            CORSMiddleware,  # type: ignore
+            allow_origins=["*"],
+            allow_credentials=True,
+            allow_methods=["*"],
+            allow_headers=["*"],
+        )
 
         @app.exception_handler(ApplicationException)
         def application_exception_handler(
