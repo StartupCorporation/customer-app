@@ -14,7 +14,7 @@ router = RabbitRouter()
 
 @router.subscriber(
     queue=RabbitQueue(
-        name="category-queue",
+        name="customer.category.queue",
         durable=True,
     ),
     title="handleCategoryEvent",
