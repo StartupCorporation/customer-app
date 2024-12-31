@@ -1,12 +1,16 @@
 import uuid
-from typing import Annotated
+from typing import Annotated, Literal
 
 from pydantic import BaseModel, UUID4, Field
 
 from application.events.category_deleted.event import CategoryDeletedEvent
+from interface.queue.contracts.base import MessageBrokerEvent
 
 
-class CategoryDeletedInputContract(BaseModel):
+type CategoryDeletedInputContract = MessageBrokerEvent[Literal["CATEGORY_DELETED"], CategoryDeletedData]
+
+
+class CategoryDeletedData(BaseModel):
     """
     Deletes a category with the provided `ID` field.
     """

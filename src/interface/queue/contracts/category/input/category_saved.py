@@ -1,12 +1,16 @@
 import uuid
-from typing import Annotated
+from typing import Annotated, Literal
 
 from pydantic import BaseModel, UUID4, Field
 
 from application.events.category_saved.event import CategorySavedEvent
+from interface.queue.contracts.base import MessageBrokerEvent
 
 
-class CategorySavedInputContract(BaseModel):
+type CategorySavedInputContract = MessageBrokerEvent[Literal["CATEGORY_SAVED"], CategorySavedData]
+
+
+class CategorySavedData(BaseModel):
     """
     Updates the existing category with the provided values.
 
@@ -42,6 +46,7 @@ class CategorySavedInputContract(BaseModel):
             min_length=1,
             examples=["accumulator.png."],
             description="The image link of the category.",
+            validation_alias='image_link',
         ),
     ]
 
