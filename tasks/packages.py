@@ -1,6 +1,15 @@
+import os
+from pathlib import Path
+
 from invoke import task, Context
 
-from tasks.shared import _change_to_root_dir
+
+@task
+def _change_to_root_dir(*_):
+    """
+    Internal pre-task to change working directory to the root directory of the project.
+    """
+    os.chdir(Path(__file__).parent.parent)
 
 
 @task(
