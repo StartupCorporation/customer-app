@@ -46,7 +46,6 @@ class CategorySavedData(BaseModel):
             min_length=1,
             examples=["accumulator.png."],
             description="The image link of the category.",
-            validation_alias='image_link',
         ),
     ]
 
