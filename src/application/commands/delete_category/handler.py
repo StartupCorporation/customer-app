@@ -1,9 +1,9 @@
-from application.events.category_deleted.event import CategoryDeletedEvent
+from application.commands.delete_category.command import DeleteCategoryCommand
 from domain.repository.category import CategoryRepository
-from infrastructure.bus.event.handler import EventHandler
+from infrastructure.bus.command.handler import CommandHandler
 
 
-class CategoryDeletedEventHandler(EventHandler):
+class DeleteCategoryCommandHandler(CommandHandler):
 
     def __init__(
         self,
@@ -13,7 +13,7 @@ class CategoryDeletedEventHandler(EventHandler):
 
     async def __call__(
         self,
-        message: CategoryDeletedEvent,
+        message: DeleteCategoryCommand,
     ) -> None:
         category = await self._category_repository.get_by_external_id(
             id_=message.external_id,

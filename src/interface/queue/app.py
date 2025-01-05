@@ -1,10 +1,11 @@
 from typing import Iterable
 
-from faststream import FastStream, ContextRepo
+from faststream import FastStream, ContextRepo, ExceptionMiddleware
 from faststream.broker.router import BrokerRouter
 from faststream.rabbit import RabbitBroker
 
 from application.layer import ApplicationLayer
+from domain.exception.base import DomainException
 from domain.layer import DomainLayer
 from infrastructure.di.container import Container
 from infrastructure.di.layer import Layer
@@ -42,7 +43,14 @@ class QueueApplication:
     ) -> FastStream:
         settings = self._container[ApplicationSettings]
 
-        broker = RabbitBroker(self._container[RabbitMQSettings].connection_url)
+        broker = RabbitBroker(
+            url=self._container[RabbitMQSettings].connection_url,
+            middlewares=[ExceptionMiddleware(
+                handlers={
+                    DomainException: self._domain_exception_handler,
+                },
+            )],
+        )
         app = FastStream(
             broker=broker,
             title=settings.TITLE,
@@ -58,6 +66,10 @@ class QueueApplication:
             context.set_global("container", self._container)
 
         return app
+
+    @staticmethod
+    def _domain_exception_handler(exc: DomainException) -> None:
+        print(f'The domain exception has occurred. Details: "{str(exc)}"')  # noqa: T201
 
     def __call__(self):
         return self._app

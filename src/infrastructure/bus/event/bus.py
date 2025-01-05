@@ -1,46 +1,46 @@
 from collections import defaultdict
 from typing import Callable, Awaitable, Iterable
 
-from infrastructure.bus.base.bus import MessageBus
+from domain.event_bus.bus.global_ import GlobalDomainEventBus
+from domain.events.base import DomainEvent
 from infrastructure.bus.base.middleware import MessageHandlerMiddleware
-from infrastructure.bus.event.handler import EventHandler
-from infrastructure.bus.event.message import Event
+from infrastructure.bus.event.subscriber import EventSubscriber
 
 
-class EventBus(MessageBus[None]):
+class EventBus(GlobalDomainEventBus):
 
     def __init__(
         self,
         middlewares: Iterable[MessageHandlerMiddleware] | None = None,
     ):
-        self._event_handlers = defaultdict(list)
-        self._middleware_chain: Callable[[Event], Awaitable[None]] = self._build_middleware_chain(
+        self._event_subscribers = defaultdict(list)
+        self._middleware_chain: Callable[[DomainEvent], Awaitable[None]] = self._build_middleware_chain(
             middlewares=middlewares or [],
         )
 
     def register(
         self,
-        message: type[Event],
-        handler: EventHandler,
+        event: type[DomainEvent],
+        subscriber: EventSubscriber,
     ) -> None:
-        self._event_handlers[message].append(handler)
+        self._event_subscribers[event].append(subscriber)
 
-    async def handle(self, message: Event) -> None:
-        await self._middleware_chain(message)
+    async def publish(self, event: DomainEvent) -> None:
+        await self._middleware_chain(event)
 
     def _build_middleware_chain(
         self,
         middlewares: Iterable[MessageHandlerMiddleware],
-    ) -> Callable[[Event], Awaitable[None]]:
-        async def event_executor(message: Event) -> None:
-            for handler in self._event_handlers[message.__class__]:
-                await handler(message=message)
+    ) -> Callable[[DomainEvent], Awaitable[None]]:
+        async def event_executor(message: DomainEvent) -> None:
+            for handler in self._event_subscribers[message.__class__]:
+                await handler(event=message)
 
         def wrapped_middleware(
             middleware: MessageHandlerMiddleware,
-            next_handler: Callable[[Event], Awaitable[None]],
-        ) -> Callable[[Event], Awaitable[None]]:
-            async def wrapped_handler(message: Event) -> None:
+            next_handler: Callable[[DomainEvent], Awaitable[None]],
+        ) -> Callable[[DomainEvent], Awaitable[None]]:
+            async def wrapped_handler(message: DomainEvent) -> None:
                 return await middleware(
                     message=message,
                     next_=next_handler,  # type: ignore

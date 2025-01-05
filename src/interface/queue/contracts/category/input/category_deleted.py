@@ -3,7 +3,7 @@ from typing import Annotated, Literal
 
 from pydantic import BaseModel, UUID4, Field
 
-from application.events.category_deleted.event import CategoryDeletedEvent
+from application.commands.delete_category.command import DeleteCategoryCommand
 from interface.queue.contracts.base import MessageBrokerEvent
 
 
@@ -23,7 +23,7 @@ class CategoryDeletedData(BaseModel):
         ),
     ]
 
-    def to_event(self) -> CategoryDeletedEvent:
-        return CategoryDeletedEvent(
+    def to_command(self) -> DeleteCategoryCommand:
+        return DeleteCategoryCommand(
             external_id=self.external_id,
         )

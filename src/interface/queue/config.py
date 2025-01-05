@@ -9,11 +9,10 @@ class QueueConfig(BaseModel):
 
 class ConsumerSettings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_prefix="RABBITMQ_QUEUE_",
-        env_nested_delimiter='__',
+        env_prefix="RABBITMQ_SUBSCRIBER_",
     )
 
-    CATEGORY: QueueConfig
+    CATEGORY_QUEUE: QueueConfig
 
 
 config = ConsumerSettings()

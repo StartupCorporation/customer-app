@@ -9,3 +9,6 @@ class CategoryRepository(CRUDRepository[UUID, Category], ABC):
 
     @abstractmethod
     async def get_by_external_id(self, id_: UUID) -> Category | None: ...
+
+    @abstractmethod
+    async def category_name_exists(self, name: str) -> bool: ...

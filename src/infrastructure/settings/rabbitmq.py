@@ -1,3 +1,6 @@
+import json
+
+from pydantic import BaseModel, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -11,6 +14,18 @@ class RabbitMQSettings(BaseSettings):
     USERNAME: str
     PASSWORD: str
 
+    ORDER_QUEUE: "QueueConfig"
+
+    @field_validator("ORDER_QUEUE", mode='before')
+    @classmethod
+    def transform_to_queue_config(cls, value: str) -> dict:
+        return json.loads(value)
+
     @property
     def connection_url(self) -> str:
         return f"amqp://{self.USERNAME}:{self.PASSWORD}@{self.HOST}:{self.PORT}"
+
+
+class QueueConfig(BaseModel):
+    NAME: str
+    EXCHANGE: str
