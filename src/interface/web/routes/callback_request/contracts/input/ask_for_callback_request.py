@@ -11,8 +11,8 @@ class AskForCallbackRequestInputContract(InputContract):
     comment: Annotated[
         str | None,
         Field(
-            description="The client's comment for the quick callback_request.",
-            examples=["I want to callback_request the Bosch S4 60Ah 540A 12V. Do you have it?"],
+            description="The client's comment for the callback request.",
+            examples=["I want to order the Bosch S4 60Ah 540A 12V. Do you have it?"],
         ),
     ]
     contact_me: Annotated[

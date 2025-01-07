@@ -12,12 +12,12 @@ from interface.web.routes.callback_request.docs.ask_for_callback_request import 
 
 router = APIRouter(
     prefix='/callback_request',
-    tags=['Order'],
+    tags=['Callback Request'],
 )
 
 
 @router.post(
-    '/',
+    '/ask/',
     responses=ASK_FOR_CALLBACK_REQUEST,
     status_code=status.HTTP_201_CREATED,
 )
