@@ -2,7 +2,6 @@ from typing import Callable, Awaitable, Iterable
 
 from infrastructure.bus.base.bus import MessageBus
 from infrastructure.bus.base.middleware import MessageHandlerMiddleware
-from infrastructure.bus.command.exception.command_handler_doesnt_exist import CommandHandlerDoesNotExist
 from infrastructure.bus.command.handler import CommandHandler
 from infrastructure.bus.command.message import Command
 
@@ -32,9 +31,7 @@ class CommandBus(MessageBus[None]):
             command_handler = self._handlers.get(message.__class__)
 
             if not command_handler:
-                raise CommandHandlerDoesNotExist(
-                    f"Command handler doesn't exist for the '{message.__class__}' command.",
-                )
+                raise ValueError(f"Command handler doesn't exist for the '{message.__class__}' command")
 
             await command_handler(message)
 

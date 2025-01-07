@@ -1,7 +1,6 @@
 from typing import Any
 
 from infrastructure.bus.base.bus import MessageBus
-from infrastructure.bus.query.exception.query_handler_doesnt_exist import QueryHandlerDoesNotExist
 from infrastructure.bus.query.handler import QueryHandler
 from infrastructure.bus.query.message import Query
 
@@ -18,8 +17,6 @@ class QueryBus(MessageBus[Any]):
         query_handler = self._handlers.get(message.__class__)
 
         if not query_handler:
-            raise QueryHandlerDoesNotExist(
-                f"Query handler doesn't exist for the '{message.__class__}' query.",
-            )
+            raise ValueError(f"Query handler doesn't exist for the '{message.__class__}' query")
 
         return await query_handler(message)
