@@ -15,7 +15,7 @@ class AskForCallbackRequestInputContract(InputContract):
             examples=["I want to order the Bosch S4 60Ah 540A 12V. Do you have it?"],
         ),
     ]
-    contact_me: Annotated[
+    message_me: Annotated[
         bool,
         Field(
             description="Whether the administrator have to contact the client or not.",
@@ -28,7 +28,7 @@ class AskForCallbackRequestInputContract(InputContract):
             customer_name=self.customer.name,
             customer_phone=self.customer.phone,
             comment=self.comment,
-            contact_me=self.contact_me,
+            message_customer=self.message_me,
         )
 
 

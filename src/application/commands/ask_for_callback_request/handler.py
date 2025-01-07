@@ -18,7 +18,7 @@ class AskForCallbackRequestCommandHandler(CommandHandler):
     ) -> None:
         callback_request = CallbackRequest.new(
             comment=message.comment,
-            contact_me=message.contact_me,
+            message_customer=message.message_customer,
             customer_name=message.customer_name,
             customer_phone=message.customer_phone,
         )

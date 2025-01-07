@@ -5,4 +5,4 @@ class AskForCallbackRequestCommand(Command):
     customer_name: str
     customer_phone: str
     comment: str | None
-    contact_me: bool
+    message_customer: bool

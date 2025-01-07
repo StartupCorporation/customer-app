@@ -2,6 +2,7 @@ from dataclasses import dataclass
 
 from domain.events.callback_request_asked import CallbackRequestAsked, CallbackRequestAskedCustomerInput
 from domain.exception.callback_request.client_name_is_not_alphabetic import ClientNameIsNotAlphabetic
+from domain.exception.callback_request.comment_is_too_small import CommentIsTooSmall
 from domain.value_object.base import ValueObject
 
 from domain.value_object.phone_number import PhoneNumber
@@ -11,13 +12,33 @@ from domain.value_object.phone_number import PhoneNumber
 class CallbackRequest(ValueObject):
     customer: "CallbackRequestCustomer"
     comment: str | None
-    contact_me: bool
+    message_customer: bool
+
+    @classmethod
+    def new(
+        cls,
+        comment: str | None,
+        message_customer: bool,
+        customer_name: str,
+        customer_phone: str,
+    ) -> "CallbackRequest":
+        return CallbackRequest(
+            comment=comment,
+            message_customer=message_customer,
+            customer=CallbackRequestCustomer.new(
+                name=customer_name,
+                phone=customer_phone,
+            ),
+        )
+
+    def __post_init__(self):
+        self._check_comment()
 
     def ask_for_callback_request(self) -> None:
         self._add_event(
             event=CallbackRequestAsked(
                 comment=self.comment,
-                contact_me=self.contact_me,
+                message_customer=self.message_customer,
                 customer=CallbackRequestAskedCustomerInput(
                     name=self.customer.name,
                     phone=self.customer.phone.number,
@@ -25,22 +46,9 @@ class CallbackRequest(ValueObject):
             ),
         )
 
-    @classmethod
-    def new(
-        cls,
-        comment: str | None,
-        contact_me: bool,
-        customer_name: str,
-        customer_phone: str,
-    ) -> "CallbackRequest":
-        return CallbackRequest(
-            comment=comment,
-            contact_me=contact_me,
-            customer=CallbackRequestCustomer.new(
-                name=customer_name,
-                phone=customer_phone,
-            ),
-        )
+    def _check_comment(self) -> None:
+        if self.comment is not None and len(self.comment) < 10:
+            raise CommentIsTooSmall()
 
 
 @dataclass(kw_only=True, slots=True)

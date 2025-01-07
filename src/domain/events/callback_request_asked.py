@@ -6,7 +6,7 @@ from domain.events.base import DomainEvent
 class CallbackRequestAsked(DomainEvent):
     customer: "CallbackRequestAskedCustomerInput"
     comment: str | None
-    contact_me: bool
+    message_customer: bool
 
 
 class CallbackRequestAskedCustomerInput(BaseModel):

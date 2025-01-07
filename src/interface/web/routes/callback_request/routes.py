@@ -17,7 +17,7 @@ router = APIRouter(
 
 
 @router.post(
-    '/ask/',
+    '/',
     responses=ASK_FOR_CALLBACK_REQUEST,
     status_code=status.HTTP_201_CREATED,
 )
