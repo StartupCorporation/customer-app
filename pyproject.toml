@@ -13,6 +13,7 @@ dependencies = [
     "typer",
     "faststream[rabbit,cli]",
     "alembic",
+    "phonenumbers",
 ]
 
 [project.optional-dependencies]

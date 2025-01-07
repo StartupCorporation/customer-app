@@ -3,7 +3,7 @@ from typing import Annotated, Literal
 
 from pydantic import BaseModel, UUID4, Field
 
-from application.events.category_saved.event import CategorySavedEvent
+from application.commands.save_category.command import SaveCategoryCommand
 from interface.queue.contracts.base import MessageBrokerEvent
 
 
@@ -49,8 +49,8 @@ class CategorySavedData(BaseModel):
         ),
     ]
 
-    def to_event(self) -> CategorySavedEvent:
-        return CategorySavedEvent(
+    def to_command(self) -> SaveCategoryCommand:
+        return SaveCategoryCommand(
             external_id=self.external_id,
             name=self.name,
             description=self.description,

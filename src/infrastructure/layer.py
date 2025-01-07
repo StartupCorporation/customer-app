@@ -1,3 +1,4 @@
+from domain.event_bus.bus.global_ import GlobalDomainEventBus
 from domain.repository.category import CategoryRepository
 from domain.repository.product import ProductRepository
 from infrastructure.bus.command.bus import CommandBus
@@ -11,9 +12,9 @@ from infrastructure.di.container import Container
 from infrastructure.di.layer import Layer
 from infrastructure.database.relational.repository.category import SQLAlchemyCategoryRepository
 from infrastructure.database.relational.repository.product import SQLAlchemyProductRepository
-from infrastructure.message_broker.base.manager import MessageBrokerManager
+from infrastructure.message_broker.base.manager import MessageBrokerPublisher
 from infrastructure.message_broker.rabbitmq.connection import RabbitMQConnectionManager
-from infrastructure.message_broker.rabbitmq.manager import RabbitMQManager
+from infrastructure.message_broker.rabbitmq.manager import RabbitMQPublisher
 from infrastructure.settings.application import ApplicationSettings
 from infrastructure.settings.database import DatabaseSettings
 from infrastructure.settings.rabbitmq import RabbitMQSettings
@@ -40,13 +41,13 @@ class InfrastructureLayer(Layer):
             transaction_manager=container[SQLDatabaseTransactionManager],
         )
 
+        container[QueryBus] = QueryBus()
         container[CommandBus] = CommandBus(
             middlewares=(
                 container[TransactionMiddleware],
             ),
         )
-        container[QueryBus] = QueryBus()
-        container[EventBus] = EventBus(
+        container[GlobalDomainEventBus] = EventBus(
             middlewares=(
                 container[TransactionMiddleware],
             ),
@@ -64,7 +65,7 @@ class InfrastructureLayer(Layer):
         container[RabbitMQConnectionManager] = RabbitMQConnectionManager(
             settings=container[RabbitMQSettings],
         )
-        container[MessageBrokerManager] = RabbitMQManager(
+        container[MessageBrokerPublisher] = RabbitMQPublisher(
             connection_manager=container[RabbitMQConnectionManager],
         )
 

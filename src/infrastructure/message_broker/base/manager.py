@@ -2,7 +2,12 @@ from abc import ABC, abstractmethod
 from typing import AsyncIterator
 
 
-class MessageBrokerManager(ABC):
+class MessageBrokerPublisher(ABC):
 
     @abstractmethod
-    async def consume(self, queue: str) -> AsyncIterator[bytes]: ...
+    async def publish(
+        self,
+        destination: str,
+        message: dict,
+        **kwargs,
+    ) -> AsyncIterator[bytes]: ...

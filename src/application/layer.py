@@ -1,20 +1,28 @@
-from application.events.category_deleted.event import CategoryDeletedEvent
-from application.events.category_deleted.handler import CategoryDeletedEventHandler
-from application.events.category_saved.event import CategorySavedEvent
-from application.events.category_saved.handler import CategorySavedEventHandler
+from application.commands.ask_for_callback_request.command import AskForCallbackRequestCommand
+from application.commands.ask_for_callback_request.handler import AskForCallbackRequestCommandHandler
+from application.commands.delete_category.command import DeleteCategoryCommand
+from application.commands.delete_category.handler import DeleteCategoryCommandHandler
+from application.commands.save_category.command import SaveCategoryCommand
+from application.commands.save_category.handler import SaveCategoryCommandHandler
+from application.event_subscribers.ask_admin_for_callback_request import AskAdminForCallbackRequest
 from application.queries.get_category_products.handler import GetCategoryProductsQueryHandler
 from application.queries.get_category_products.query import GetCategoryProductsQuery
 from application.queries.get_categories.handler import GetCategoriesQueryHandler
 from application.queries.get_categories.query import GetCategoriesQuery
 from application.queries.get_product_details.handler import GetProductDetailsQueryHandler
 from application.queries.get_product_details.query import GetProductDetailsQuery
+from domain.event_bus.bus.global_ import GlobalDomainEventBus
+from domain.events.callback_request_asked import CallbackRequestAsked
 from domain.repository.category import CategoryRepository
 from domain.service.category import CategoryService
-from infrastructure.bus.event.bus import EventBus
+from domain.service.callback_request import CallbackRequestService
+from infrastructure.bus.command.bus import CommandBus
 from infrastructure.bus.query.bus import QueryBus
 from infrastructure.database.relational.connection import SQLDatabaseConnectionManager
 from infrastructure.di.container import Container
 from infrastructure.di.layer import Layer
+from infrastructure.message_broker.base.manager import MessageBrokerPublisher
+from infrastructure.settings.rabbitmq import RabbitMQSettings
 
 
 class ApplicationLayer(Layer):
@@ -39,16 +47,29 @@ class ApplicationLayer(Layer):
             ),
         )
 
-        container[EventBus].register(
-            message=CategoryDeletedEvent,
-            handler=CategoryDeletedEventHandler(
+        container[CommandBus].register(
+            message=DeleteCategoryCommand,
+            handler=DeleteCategoryCommandHandler(
                 category_repository=container[CategoryRepository],
             ),
         )
-        container[EventBus].register(
-            message=CategorySavedEvent,
-            handler=CategorySavedEventHandler(
-                category_repository=container[CategoryRepository],
+        container[CommandBus].register(
+            message=SaveCategoryCommand,
+            handler=SaveCategoryCommandHandler(
                 category_service=container[CategoryService],
+            ),
+        )
+        container[CommandBus].register(
+            message=AskForCallbackRequestCommand,
+            handler=AskForCallbackRequestCommandHandler(
+                callback_request_service=container[CallbackRequestService],
+            ),
+        )
+
+        container[GlobalDomainEventBus].register(
+            event=CallbackRequestAsked,
+            subscriber=AskAdminForCallbackRequest(
+                message_broker_publisher=container[MessageBrokerPublisher],
+                callback_request_queue_config=container[RabbitMQSettings].ADMIN_CALLBACK_REQUEST_QUEUE,
             ),
         )

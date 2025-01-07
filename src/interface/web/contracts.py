@@ -8,3 +8,10 @@ class OutputContract(BaseModel):
         populate_by_name=True,
         alias_generator=to_camel,
     )
+
+
+class InputContract(BaseModel):
+    model_config = ConfigDict(
+        populate_by_name=True,
+        alias_generator=to_camel,
+    )

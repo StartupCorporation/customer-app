@@ -1,15 +1,18 @@
 from typing import Iterable, Awaitable, Callable
 
-from fastapi import FastAPI, Request, APIRouter, HTTPException, status
+from fastapi import FastAPI, Request, APIRouter, status
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
-from application.exception.base import NotFound, ApplicationException
+from application.exception.base import NotFound
 from application.layer import ApplicationLayer
+from domain.exception.base import DomainException
 from domain.layer import DomainLayer
 from infrastructure.di.container import Container
 from infrastructure.di.layer import Layer
 from infrastructure.layer import InfrastructureLayer
 from infrastructure.settings.application import ApplicationSettings
+from interface.web.routes.callback_request.routes import router as callback_request_router
 from interface.web.routes.category.routes import router as category_router
 
 
@@ -60,6 +63,13 @@ class WebApplication:
             request.state.container = self._container
             return await call_next(request)
 
+        @app.middleware("http")
+        async def exception_handling_middleware(request: Request, call_next):
+            try:
+                return await call_next(request)
+            except Exception as e:
+                return self._exception_factory(exception=e)
+
         app.add_middleware(
             CORSMiddleware,  # type: ignore
             allow_origins=["*"],
@@ -68,22 +78,26 @@ class WebApplication:
             allow_headers=["*"],
         )
 
-        @app.exception_handler(ApplicationException)
-        def application_exception_handler(
-            request: Request,  # noqa: ARG001
-            exc: Exception,
-        ) -> None:
-            raise self._exception_factory(exception=exc)
-
         return app
 
-    @staticmethod
-    def _exception_factory(exception: Exception) -> HTTPException:
+    def _exception_factory(self, exception: Exception) -> JSONResponse:
         match exception:
             case NotFound():
-                return HTTPException(
+                return JSONResponse(
                     status_code=status.HTTP_404_NOT_FOUND,
-                    detail=str(exception),
+                    content={"detail": str(exception)},
+                )
+            case DomainException():
+                return JSONResponse(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    content={"detail": str(exception)},
+                )
+            case Exception() if self._container[ApplicationSettings].DEBUG:
+                raise exception
+            case Exception():
+                return JSONResponse(
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    content={"detail": "Something went wrong..."},
                 )
 
     def __call__(self):
@@ -98,5 +112,6 @@ web_app = WebApplication(
     ),
     routes=(
         category_router,
+        callback_request_router,
     ),
 )
