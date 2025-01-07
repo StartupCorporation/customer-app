@@ -24,7 +24,7 @@ class Product(Entity[UUID]):
     ) -> None:
         if not image_link:
             raise InvalidImageLink(
-                "Image link cannot be zero-length.",
+                "Image link cannot be zero-length",
             )
 
         if image_link in self.images:

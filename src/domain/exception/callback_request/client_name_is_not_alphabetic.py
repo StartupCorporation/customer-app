@@ -1,10 +1,10 @@
 from domain.exception.base import DomainException
 
 
-class PhoneNumberIsNotNumberException(DomainException):
+class ClientNameIsNotAlphabetic(DomainException):
 
     def __init__(
         self,
-        detail: str = "Client's phone number must contain only numbers.",
+        detail: str = 'Client name must be alphabetic',
     ):
         super().__init__(detail=detail)

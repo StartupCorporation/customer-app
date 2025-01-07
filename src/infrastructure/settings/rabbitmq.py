@@ -14,9 +14,9 @@ class RabbitMQSettings(BaseSettings):
     USERNAME: str
     PASSWORD: str
 
-    ORDER_QUEUE: "QueueConfig"
+    ADMIN_CALLBACK_REQUEST_QUEUE: "QueueConfig"
 
-    @field_validator("ORDER_QUEUE", mode='before')
+    @field_validator("ADMIN_CALLBACK_REQUEST_QUEUE", mode='before')
     @classmethod
     def transform_to_queue_config(cls, value: str) -> dict:
         return json.loads(value)

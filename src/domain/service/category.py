@@ -35,7 +35,7 @@ class CategoryService:
             )
         if not category:
             if await self._category_repository.category_name_exists(name=data.name):
-                raise CategoryNameAlreadyExist(f'Category with name "{data.name}" already exist.')
+                raise CategoryNameAlreadyExist(f'Category with name "{data.name}" already exist')
 
             category = Category(
                 id=self.generate_id(),

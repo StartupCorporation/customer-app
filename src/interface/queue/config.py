@@ -9,7 +9,7 @@ class QueueConfig(BaseModel):
 
 class ConsumerSettings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_prefix="RABBITMQ_SUBSCRIBER_",
+        env_prefix="RABBITMQ_CUSTOMER_",
     )
 
     CATEGORY_QUEUE: QueueConfig

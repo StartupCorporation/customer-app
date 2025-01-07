@@ -1,8 +1,8 @@
 from domain.event_bus.bus.global_ import GlobalDomainEventBus
-from domain.value_object.quick_order import QuickOrder
+from domain.value_object.callback_request import CallbackRequest
 
 
-class QuickOrderService:
+class CallbackRequestService:
 
     def __init__(
         self,
@@ -10,11 +10,13 @@ class QuickOrderService:
     ):
         self._global_event_bus = global_event_bus
 
-    async def ask_for_quick_order(
+    async def ask_for_callback_request(
         self,
-        quick_order: QuickOrder,
+        callback_request: CallbackRequest,
     ) -> None:
-        for event in quick_order.flush_events():
+        callback_request.ask_for_callback_request()
+
+        for event in callback_request.flush_events():
             await self._global_event_bus.publish(
                 event=event,
             )
