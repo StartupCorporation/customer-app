@@ -1,16 +1,15 @@
 from typing import Callable, Awaitable, Iterable
 
-from infrastructure.bus.base.bus import MessageBus
-from infrastructure.bus.base.middleware import MessageHandlerMiddleware
 from infrastructure.bus.command.handler import CommandHandler
 from infrastructure.bus.command.message import Command
+from infrastructure.bus.middleware.base import BusMiddleware
 
 
-class CommandBus(MessageBus[None]):
+class CommandBus:
 
     def __init__(
         self,
-        middlewares: Iterable[MessageHandlerMiddleware] | None = None,
+        middlewares: Iterable[BusMiddleware] | None = None,
     ):
         self._handlers: list[type[Command]: CommandHandler] = {}
         self._middleware_chain: Callable[[Command], Awaitable[None]] = self._build_middleware_chain(
@@ -25,7 +24,7 @@ class CommandBus(MessageBus[None]):
 
     def _build_middleware_chain(
         self,
-        middlewares: Iterable[MessageHandlerMiddleware],
+        middlewares: Iterable[BusMiddleware],
     ) -> Callable[[Command], Awaitable[None]]:
         async def command_executor(message: Command) -> None:
             command_handler = self._handlers.get(message.__class__)
@@ -33,10 +32,10 @@ class CommandBus(MessageBus[None]):
             if not command_handler:
                 raise ValueError(f"Command handler doesn't exist for the '{message.__class__}' command")
 
-            await command_handler(message)
+            await command_handler(command=message)
 
         def wrapped_middleware(
-            middleware: MessageHandlerMiddleware,
+            middleware: BusMiddleware,
             next_handler: Callable[[Command], Awaitable[None]],
         ) -> Callable[[Command], Awaitable[None]]:
             async def wrapped_handler(message: Command) -> None:

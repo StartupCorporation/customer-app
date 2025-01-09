@@ -1,13 +1,13 @@
-import json
 
 from aio_pika import Message
 from aio_pika.abc import AbstractExchange, DeliveryMode
 
 from infrastructure.message_broker.base.manager import MessageBrokerPublisher
 from infrastructure.message_broker.rabbitmq.connection import RabbitMQConnectionManager
+from infrastructure.message_broker.rabbitmq.destination import RabbitMQDEventDestination
 
 
-class RabbitMQPublisher(MessageBrokerPublisher):
+class RabbitMQPublisher(MessageBrokerPublisher[RabbitMQDEventDestination]):
 
     def __init__(
         self,
@@ -17,18 +17,15 @@ class RabbitMQPublisher(MessageBrokerPublisher):
 
     async def publish(
         self,
-        destination: str,
-        message: dict,
-        **kwargs,
+        message: bytes,
+        destination: RabbitMQDEventDestination,
     ) -> None:
-        exchange = kwargs.get('exchange')
-
         async with self._connection_manager.connect() as channel:
-            exchange: AbstractExchange = await channel.get_exchange(exchange)
+            exchange: AbstractExchange = await channel.get_exchange(destination.exchange)
             await exchange.publish(
                 message=Message(
-                    body=json.dumps(message, default=str).encode(),
+                    body=message,
                     delivery_mode=DeliveryMode.PERSISTENT,
                 ),
-                routing_key=destination,
+                routing_key=destination.routing_key,
             )

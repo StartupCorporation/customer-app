@@ -7,7 +7,7 @@ from infrastructure.database.relational.connection import SQLDatabaseConnectionM
 from infrastructure.database.relational.models.category import Category
 
 
-class GetCategoriesQueryHandler(QueryHandler[CategoryQueryResult]):
+class GetCategoriesQueryHandler(QueryHandler[GetCategoriesQuery, CategoryQueryResult]):
 
     def __init__(
         self,
@@ -17,7 +17,7 @@ class GetCategoriesQueryHandler(QueryHandler[CategoryQueryResult]):
 
     async def __call__(
         self,
-        message: GetCategoriesQuery,  # noqa: ARG002
+        query: GetCategoriesQuery,  # noqa: ARG002
     ) -> CategoryQueryResult:
         async with self._connection_manager.session() as session:
             stmt = select(Category)

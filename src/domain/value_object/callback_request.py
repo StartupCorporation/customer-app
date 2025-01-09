@@ -1,10 +1,9 @@
 from dataclasses import dataclass
 
-from domain.events.callback_request_asked import CallbackRequestAsked, CallbackRequestAskedCustomerInput
+from domain.events.callback_request_asked import CallbackRequestAsked
 from domain.exception.callback_request.client_name_is_not_alphabetic import ClientNameIsNotAlphabetic
 from domain.exception.callback_request.comment_is_too_small import CommentIsTooSmall
 from domain.value_object.base import ValueObject
-
 from domain.value_object.phone_number import PhoneNumber
 
 
@@ -37,12 +36,7 @@ class CallbackRequest(ValueObject):
     def ask_for_callback_request(self) -> None:
         self._add_event(
             event=CallbackRequestAsked(
-                comment=self.comment,
-                message_customer=self.message_customer,
-                customer=CallbackRequestAskedCustomerInput(
-                    name=self.customer.name,
-                    phone=self.customer.phone.number,
-                ),
+                callback_request=self,
             ),
         )
 

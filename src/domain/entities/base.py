@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Any
 
-from domain.event_bus.event_based import EventBased
+from domain.event_bus.mixin import EventBased
 
 
 @dataclass(kw_only=True)

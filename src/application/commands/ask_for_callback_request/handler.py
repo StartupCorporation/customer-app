@@ -4,7 +4,7 @@ from domain.value_object.callback_request import CallbackRequest
 from infrastructure.bus.command.handler import CommandHandler
 
 
-class AskForCallbackRequestCommandHandler(CommandHandler):
+class AskForCallbackRequestCommandHandler(CommandHandler[AskForCallbackRequestCommand]):
 
     def __init__(
         self,
@@ -14,13 +14,13 @@ class AskForCallbackRequestCommandHandler(CommandHandler):
 
     async def __call__(
         self,
-        message: AskForCallbackRequestCommand,
+        command: AskForCallbackRequestCommand,
     ) -> None:
         callback_request = CallbackRequest.new(
-            comment=message.comment,
-            message_customer=message.message_customer,
-            customer_name=message.customer_name,
-            customer_phone=message.customer_phone,
+            comment=command.comment,
+            message_customer=command.message_customer,
+            customer_name=command.customer_name,
+            customer_phone=command.customer_phone,
         )
         await self._callback_request_service.ask_for_callback_request(
             callback_request=callback_request,

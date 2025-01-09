@@ -1,10 +1,10 @@
 from typing import Callable, Awaitable, Any
 
-from infrastructure.bus.base.middleware import MessageHandlerMiddleware
+from infrastructure.bus.middleware.base import BusMiddleware
 from infrastructure.database.relational.transaction import SQLDatabaseTransactionManager
 
 
-class TransactionMiddleware[RESULT](MessageHandlerMiddleware[RESULT]):
+class TransactionMiddleware(BusMiddleware):
 
     def __init__(
         self,
@@ -16,6 +16,6 @@ class TransactionMiddleware[RESULT](MessageHandlerMiddleware[RESULT]):
         self,
         message: Any,
         next_: Callable[[Any], Awaitable[Any]],
-    ) -> RESULT:
+    ) -> Any:
         async with self._transaction_manager.begin():
             return await next_(message)

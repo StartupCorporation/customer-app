@@ -13,7 +13,7 @@ from infrastructure.database.relational.models.comment import ProductComment
 from infrastructure.database.relational.models.product import Product
 
 
-class GetProductDetailsQueryHandler(QueryHandler[GetProductDetailsQueryResult]):
+class GetProductDetailsQueryHandler(QueryHandler[GetProductDetailsQuery, GetProductDetailsQueryResult]):
 
     def __init__(
         self,
@@ -23,7 +23,7 @@ class GetProductDetailsQueryHandler(QueryHandler[GetProductDetailsQueryResult]):
 
     async def __call__(
         self,
-        message: GetProductDetailsQuery,
+        query: GetProductDetailsQuery,
     ) -> GetProductDetailsQueryResult:
         async with self._connection_manager.session() as session:
             product_stmt = select(
@@ -34,26 +34,26 @@ class GetProductDetailsQueryHandler(QueryHandler[GetProductDetailsQueryResult]):
                 Product.characteristics,
                 Product.images,
             ).where(
-                Product.id == message.product_id,
+                Product.id == query.product_id,
             )
             product = (await session.execute(product_stmt)).one_or_none()
 
             if not product:
-                raise ProductNotFoundException(f"Product with id '{message.product_id}' is not found.")
+                raise ProductNotFoundException(f"Product with id '{query.product_id}' is not found.")
 
             comments_stmt = select(
                 ProductComment.created_at,
                 ProductComment.author,
                 ProductComment.content,
             ).where(
-                ProductComment.product_id == message.product_id,
+                ProductComment.product_id == query.product_id,
             ).order_by(
                 ProductComment.created_at.desc(),
             )
             comments = await session.execute(comments_stmt)
 
         return ProductDetails(
-            id=message.product_id,
+            id=query.product_id,
             name=product.name,
             description=product.description,
             quantity=product.quantity,

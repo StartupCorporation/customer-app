@@ -3,7 +3,7 @@ from domain.repository.category import CategoryRepository
 from infrastructure.bus.command.handler import CommandHandler
 
 
-class DeleteCategoryCommandHandler(CommandHandler):
+class DeleteCategoryCommandHandler(CommandHandler[DeleteCategoryCommand]):
 
     def __init__(
         self,
@@ -13,10 +13,10 @@ class DeleteCategoryCommandHandler(CommandHandler):
 
     async def __call__(
         self,
-        message: DeleteCategoryCommand,
+        command: DeleteCategoryCommand,
     ) -> None:
         category = await self._category_repository.get_by_external_id(
-            id_=message.external_id,
+            id_=command.external_id,
         )
 
         if not category:

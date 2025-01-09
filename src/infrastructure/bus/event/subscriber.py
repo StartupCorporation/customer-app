@@ -1,10 +1,9 @@
 from abc import ABC, abstractmethod
 
-from domain.events.base import DomainEvent
-from infrastructure.bus.base.handler import MessageHandler
+from domain.event_bus.event import ModelEvent
 
 
-class EventSubscriber(MessageHandler[None], ABC):
+class EventSubscriber[EVENT: ModelEvent](ABC):
 
     @abstractmethod
-    async def __call__(self, message: DomainEvent) -> None: ...
+    async def __call__(self, event: EVENT) -> None: ...

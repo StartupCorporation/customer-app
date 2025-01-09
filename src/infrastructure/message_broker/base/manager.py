@@ -1,13 +1,9 @@
 from abc import ABC, abstractmethod
-from typing import AsyncIterator
+
+from infrastructure.message_broker.base.destination import MessageDestination
 
 
-class MessageBrokerPublisher(ABC):
+class MessageBrokerPublisher[DESTINATION: MessageDestination](ABC):
 
     @abstractmethod
-    async def publish(
-        self,
-        destination: str,
-        message: dict,
-        **kwargs,
-    ) -> AsyncIterator[bytes]: ...
+    async def publish(self, message: bytes, destination: DESTINATION) -> None: ...
