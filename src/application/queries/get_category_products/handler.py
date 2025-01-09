@@ -7,7 +7,7 @@ from infrastructure.database.relational.connection import SQLDatabaseConnectionM
 from infrastructure.database.relational.models.product import Product
 
 
-class GetCategoryProductsQueryHandler(QueryHandler[GetCategoryProductsQueryResult]):
+class GetCategoryProductsQueryHandler(QueryHandler[GetCategoryProductsQuery, GetCategoryProductsQueryResult]):
 
     def __init__(
         self,
@@ -17,7 +17,7 @@ class GetCategoryProductsQueryHandler(QueryHandler[GetCategoryProductsQueryResul
 
     async def __call__(
         self,
-        message: GetCategoryProductsQuery,
+        query: GetCategoryProductsQuery,
     ) -> GetCategoryProductsQueryResult:
         async with self._connection_manager.session() as session:
             stmt = select(
@@ -25,7 +25,7 @@ class GetCategoryProductsQueryHandler(QueryHandler[GetCategoryProductsQueryResul
                 Product.name,
                 Product.images,
             ).where(
-                Product.category_id == message.category_id,
+                Product.category_id == query.category_id,
             )
             results = await session.execute(stmt)
 

@@ -1,7 +1,7 @@
 from abc import ABC
 
-from infrastructure.bus.base.message import Message
+from pydantic import BaseModel
 
 
-class Query(Message, ABC):
+class Query(BaseModel, ABC):
     pass

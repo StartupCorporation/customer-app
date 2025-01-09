@@ -3,5 +3,5 @@ from abc import ABC
 from pydantic import BaseModel
 
 
-class Message(BaseModel, ABC):
+class MessageDestination(BaseModel, ABC):
     pass

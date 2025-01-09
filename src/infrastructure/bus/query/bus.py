@@ -1,11 +1,10 @@
 from typing import Any
 
-from infrastructure.bus.base.bus import MessageBus
 from infrastructure.bus.query.handler import QueryHandler
 from infrastructure.bus.query.message import Query
 
 
-class QueryBus(MessageBus[Any]):
+class QueryBus:
 
     def __init__(self):
         self._handlers = {}

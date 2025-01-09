@@ -4,15 +4,12 @@ from application.commands.delete_category.command import DeleteCategoryCommand
 from application.commands.delete_category.handler import DeleteCategoryCommandHandler
 from application.commands.save_category.command import SaveCategoryCommand
 from application.commands.save_category.handler import SaveCategoryCommandHandler
-from application.event_subscribers.ask_admin_for_callback_request import AskAdminForCallbackRequest
 from application.queries.get_category_products.handler import GetCategoryProductsQueryHandler
 from application.queries.get_category_products.query import GetCategoryProductsQuery
 from application.queries.get_categories.handler import GetCategoriesQueryHandler
 from application.queries.get_categories.query import GetCategoriesQuery
 from application.queries.get_product_details.handler import GetProductDetailsQueryHandler
 from application.queries.get_product_details.query import GetProductDetailsQuery
-from domain.event_bus.bus.global_ import GlobalDomainEventBus
-from domain.events.callback_request_asked import CallbackRequestAsked
 from domain.repository.category import CategoryRepository
 from domain.service.category import CategoryService
 from domain.service.callback_request import CallbackRequestService
@@ -21,8 +18,6 @@ from infrastructure.bus.query.bus import QueryBus
 from infrastructure.database.relational.connection import SQLDatabaseConnectionManager
 from infrastructure.di.container import Container
 from infrastructure.di.layer import Layer
-from infrastructure.message_broker.base.manager import MessageBrokerPublisher
-from infrastructure.settings.rabbitmq import RabbitMQSettings
 
 
 class ApplicationLayer(Layer):
@@ -63,13 +58,5 @@ class ApplicationLayer(Layer):
             message=AskForCallbackRequestCommand,
             handler=AskForCallbackRequestCommandHandler(
                 callback_request_service=container[CallbackRequestService],
-            ),
-        )
-
-        container[GlobalDomainEventBus].register(
-            event=CallbackRequestAsked,
-            subscriber=AskAdminForCallbackRequest(
-                message_broker_publisher=container[MessageBrokerPublisher],
-                callback_request_queue_config=container[RabbitMQSettings].ADMIN_CALLBACK_REQUEST_QUEUE,
             ),
         )

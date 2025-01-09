@@ -3,7 +3,7 @@ from domain.service.category import CategoryService
 from infrastructure.bus.command.handler import CommandHandler
 
 
-class SaveCategoryCommandHandler(CommandHandler):
+class SaveCategoryCommandHandler(CommandHandler[SaveCategoryCommand]):
 
     def __init__(
         self,
@@ -13,8 +13,8 @@ class SaveCategoryCommandHandler(CommandHandler):
 
     async def __call__(
         self,
-        message: SaveCategoryCommand,
+        command: SaveCategoryCommand,
     ) -> None:
         await self._category_service.save_category(
-            data=message.to_dto(),
+            data=command.to_dto(),
         )
