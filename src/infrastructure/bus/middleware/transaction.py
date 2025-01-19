@@ -1,14 +1,14 @@
 from typing import Callable, Awaitable, Any
 
 from infrastructure.bus.middleware.base import BusMiddleware
-from infrastructure.database.relational.transaction import SQLDatabaseTransactionManager
+from infrastructure.database.base.transaction import DatabaseTransactionManager
 
 
 class TransactionMiddleware(BusMiddleware):
 
     def __init__(
         self,
-        transaction_manager: SQLDatabaseTransactionManager,
+        transaction_manager: DatabaseTransactionManager,
     ):
         self._transaction_manager = transaction_manager
 

@@ -16,7 +16,7 @@ class IntegrationEventRepository:
     ) -> None:
         self._mapper[event].append(destination)
 
-    def get_destinations(
+    def get_event_destinations(
         self,
         event: type[IntegrationEvent],
     ) -> list[MessageDestination]:

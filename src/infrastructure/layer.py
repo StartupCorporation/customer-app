@@ -8,8 +8,10 @@ from infrastructure.bus.event.middleware.event_dispatcher import ModelEventDispa
 from infrastructure.bus.event.repository import IntegrationEventRepository
 from infrastructure.bus.middleware.transaction import TransactionMiddleware
 from infrastructure.bus.query.bus import QueryBus
+from infrastructure.database.base.transaction import DatabaseTransactionManager
 from infrastructure.database.relational.connection import SQLDatabaseConnectionManager
 from infrastructure.database.relational.mapper import DatabaseToEntityMapper
+from infrastructure.database.relational.repository.transactional_outbox import SQLAlchemyTransactionalOutboxRepository
 from infrastructure.database.relational.transaction import SQLDatabaseTransactionManager
 from infrastructure.di.container import Container
 from infrastructure.di.layer import Layer
@@ -22,6 +24,8 @@ from infrastructure.message_broker.rabbitmq.manager import RabbitMQPublisher
 from infrastructure.settings.application import ApplicationSettings
 from infrastructure.settings.database import DatabaseSettings
 from infrastructure.settings.rabbitmq import RabbitMQSettings
+from infrastructure.tl_outbox.repository import TransactionalOutboxRepository
+from infrastructure.tl_outbox.service import TransactionalOutboxService
 
 
 class InfrastructureLayer(Layer):
@@ -30,14 +34,14 @@ class InfrastructureLayer(Layer):
         self,
         container: Container,
     ) -> None:
-        container[ApplicationSettings] = ApplicationSettings()
-        container[DatabaseSettings] = DatabaseSettings()
-        container[RabbitMQSettings] = RabbitMQSettings()
+        container[ApplicationSettings] = ApplicationSettings()  # type: ignore
+        container[DatabaseSettings] = DatabaseSettings()  # type: ignore
+        container[RabbitMQSettings] = RabbitMQSettings()  # type: ignore
 
         container[SQLDatabaseConnectionManager] = SQLDatabaseConnectionManager(
             settings=container[DatabaseSettings],
         )
-        container[SQLDatabaseTransactionManager] = SQLDatabaseTransactionManager(
+        container[DatabaseTransactionManager] = SQLDatabaseTransactionManager(
             connection_manager=container[SQLDatabaseConnectionManager],
         )
 
@@ -45,6 +49,9 @@ class InfrastructureLayer(Layer):
             connection_manager=container[SQLDatabaseConnectionManager],
         )
         container[ProductRepository] = SQLAlchemyProductRepository(
+            connection_manager=container[SQLDatabaseConnectionManager],
+        )
+        container[TransactionalOutboxRepository] = SQLAlchemyTransactionalOutboxRepository(
             connection_manager=container[SQLDatabaseConnectionManager],
         )
         container[IntegrationEventRepository] = IntegrationEventRepository()
@@ -57,11 +64,16 @@ class InfrastructureLayer(Layer):
         )
 
         container[ModelEventDispatcherMiddleware] = ModelEventDispatcherMiddleware(
-            message_broker_publisher=container[MessageBrokerPublisher],
-            integration_event_repository=container[IntegrationEventRepository],
+            transactional_outbox_repository=container[TransactionalOutboxRepository],
         )
         container[TransactionMiddleware] = TransactionMiddleware(
-            transaction_manager=container[SQLDatabaseTransactionManager],
+            transaction_manager=container[DatabaseTransactionManager],
+        )
+        container[TransactionalOutboxService] = TransactionalOutboxService(
+            transactional_outbox_repository=container[TransactionalOutboxRepository],
+            message_broker_publisher=container[MessageBrokerPublisher],
+            integration_event_repository=container[IntegrationEventRepository],
+            transaction_manager=container[DatabaseTransactionManager],
         )
 
         container[QueryBus] = QueryBus()
