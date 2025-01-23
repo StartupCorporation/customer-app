@@ -11,7 +11,7 @@ class EventBus(ModelEventBus):
 
     def __init__(
         self,
-        middlewares: Iterable[BusMiddleware] | None = None,
+        middlewares: tuple[BusMiddleware] | None = None,
     ):
         self._event_subscribers: dict[type[ModelEvent], list[EventSubscriber]] = defaultdict(list)
         self._middleware_chain = self._build_middleware_chain(

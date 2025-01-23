@@ -2,18 +2,19 @@ import asyncio
 from logging.config import fileConfig
 
 from alembic import context
+from infrastructure.di.utils import get_di_container
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from infrastructure.database.relational.models.base import Base
-from infrastructure.di.container import Container
 from infrastructure.layer import InfrastructureLayer
 from infrastructure.settings.database import DatabaseSettings
 
 
-container = Container()
-InfrastructureLayer().setup(container)
+container = get_di_container(
+    layers=[InfrastructureLayer()],
+)
 
 config = context.config
 config.set_main_option(

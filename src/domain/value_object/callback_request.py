@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 
-from domain.events.callback_request_asked import CallbackRequestAsked
 from domain.exception.callback_request.client_name_is_not_alphabetic import ClientNameIsNotAlphabetic
 from domain.exception.callback_request.comment_is_too_small import CommentIsTooSmall
 from domain.value_object.base import ValueObject
@@ -34,6 +33,8 @@ class CallbackRequest(ValueObject):
         self._check_comment()
 
     def ask_for_callback_request(self) -> None:
+        from domain.events.callback_request_asked import CallbackRequestAsked
+
         self._add_event(
             event=CallbackRequestAsked(
                 callback_request=self,

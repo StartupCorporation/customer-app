@@ -1,9 +1,10 @@
 from contextlib import asynccontextmanager
 
+from infrastructure.database.base.transaction import DatabaseTransactionManager
 from infrastructure.database.relational.connection import SQLDatabaseConnectionManager
 
 
-class SQLDatabaseTransactionManager:
+class SQLDatabaseTransactionManager(DatabaseTransactionManager):
 
     def __init__(
         self,
