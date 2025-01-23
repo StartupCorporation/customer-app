@@ -9,7 +9,7 @@ from application.layer import ApplicationLayer
 from domain.exception.base import DomainException
 from domain.layer import DomainLayer
 from infrastructure.di.container import Container
-from infrastructure.di.layer import Layer
+from infrastructure.di.utils import get_di_container
 from infrastructure.layer import InfrastructureLayer
 from infrastructure.settings.application import ApplicationSettings
 from interface.web.routes.callback_request.routes import router as callback_request_router
@@ -20,23 +20,13 @@ class WebApplication:
 
     def __init__(
         self,
-        layers: Iterable[Layer],
+        container: Container,
         routes: Iterable[APIRouter],
     ):
-        self._container = Container()
-        self._setup_layers(
-            layers=layers,
-        )
+        self._container = container
         self._app = self._create_application(
             routes=routes,
         )
-
-    def _setup_layers(
-        self,
-        layers: Iterable[Layer],
-    ) -> None:
-        for layer in layers:
-            layer.setup(container=self._container)
 
     def _create_application(
         self,
@@ -105,10 +95,12 @@ class WebApplication:
 
 
 web_app = WebApplication(
-    layers=(
-        InfrastructureLayer(),
-        DomainLayer(),
-        ApplicationLayer(),
+    container=get_di_container(
+        layers=(
+            InfrastructureLayer(),
+            DomainLayer(),
+            ApplicationLayer(),
+        ),
     ),
     routes=(
         category_router,

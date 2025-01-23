@@ -8,7 +8,7 @@ First of all, you have to create a virtual environment and install all necessary
 ```shell
 $ virtualenv venv -p 3.12  # Creates a virtual environment
 $ . venv/bin/activate  # Activates the virtual environment
-$ pip install pip-tools  # Installs `pip-tools` library to manage project dependencies
+$ pip install pip-tools invoke  # Installs `pip-tools` library to manage project dependencies
 $ inv packages.install  # Installs all necessary dependencies for the local development
 $ pre-commit install  # Installs pre-commit hooks
 ```
