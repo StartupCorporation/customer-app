@@ -40,15 +40,17 @@ Conventional commits [cheatsheet](https://gist.github.com/qoomon/5dfcdf8eec66a05
 `main` branch:
 * Contains tested and stable code.
 
-Feature branches should be named using the following convention:
-* `feature/create-order`
-* `feature/delete-comment`
-* `feature/base-code`
+Branches should be named using the following convention:
+* `feat-create-order`
+* `feat-delete-comment`
+* `feat-add-base-code`
+* `refactor-repository-interface`
 
 As a result, the branch describes what it should do:
 * **Feature** will add functionality to **create order**...
 * **Feature** will add functionality to **delete order**...
 * **Feature** will add **base code**...
+* **Refactoring** will update **repository interface**...
 
 ### Merge Requests
 
