@@ -1,10 +1,4 @@
-from pydantic import BaseModel
 from pydantic_settings import BaseSettings, SettingsConfigDict
-
-
-class QueueConfig(BaseModel):
-    NAME: str
-    DURABLE: bool
 
 
 class ConsumerSettings(BaseSettings):
@@ -12,7 +6,7 @@ class ConsumerSettings(BaseSettings):
         env_prefix="RABBITMQ_CUSTOMER_",
     )
 
-    CATEGORY_QUEUE: QueueConfig
+    CATEGORY_QUEUE: str
 
 
-config = ConsumerSettings()
+config = ConsumerSettings()  # type: ignore

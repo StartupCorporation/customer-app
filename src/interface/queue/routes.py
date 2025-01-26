@@ -15,8 +15,8 @@ router = RabbitRouter()
 
 @router.subscriber(
     queue=RabbitQueue(
-        name=config.CATEGORY_QUEUE.NAME,
-        durable=config.CATEGORY_QUEUE.DURABLE,
+        name=config.CATEGORY_QUEUE,
+        passive=True,
     ),
     title="handleCategoryEvent",
     description="Handles events from the customer microservice category queue.",
