@@ -16,5 +16,8 @@ class SaveCategoryCommandHandler(CommandHandler[SaveCategoryCommand]):
         command: SaveCategoryCommand,
     ) -> None:
         await self._category_service.save_category(
-            data=command.to_dto(),
+            name=command.name,
+            description=command.description,
+            image=command.image,
+            external_id=command.external_id,
         )

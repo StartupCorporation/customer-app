@@ -16,7 +16,7 @@ class DeleteCategoryCommandHandler(CommandHandler[DeleteCategoryCommand]):
         command: DeleteCategoryCommand,
     ) -> None:
         category = await self._category_repository.get_by_external_id(
-            id_=command.external_id,
+            external_id=command.external_id,
         )
 
         if not category:

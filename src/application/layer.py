@@ -2,8 +2,12 @@ from application.commands.ask_for_callback_request.command import AskForCallback
 from application.commands.ask_for_callback_request.handler import AskForCallbackRequestCommandHandler
 from application.commands.delete_category.command import DeleteCategoryCommand
 from application.commands.delete_category.handler import DeleteCategoryCommandHandler
+from application.commands.delete_product.command import DeleteProductCommand
+from application.commands.delete_product.handler import DeleteProductCommandHandler
 from application.commands.save_category.command import SaveCategoryCommand
 from application.commands.save_category.handler import SaveCategoryCommandHandler
+from application.commands.save_product.command import SaveProductCommand
+from application.commands.save_product.handler import SaveProductCommandHandler
 from application.queries.get_category_products.handler import GetCategoryProductsQueryHandler
 from application.queries.get_category_products.query import GetCategoryProductsQuery
 from application.queries.get_categories.handler import GetCategoriesQueryHandler
@@ -11,8 +15,10 @@ from application.queries.get_categories.query import GetCategoriesQuery
 from application.queries.get_product_details.handler import GetProductDetailsQueryHandler
 from application.queries.get_product_details.query import GetProductDetailsQuery
 from domain.repository.category import CategoryRepository
-from domain.service.category import CategoryService
+from domain.repository.product import ProductRepository
 from domain.service.callback_request import CallbackRequestService
+from domain.service.category import CategoryService
+from domain.service.product import ProductService
 from infrastructure.bus.command.bus import CommandBus
 from infrastructure.bus.query.bus import QueryBus
 from infrastructure.database.relational.connection import SQLDatabaseConnectionManager
@@ -58,5 +64,17 @@ class ApplicationLayer(Layer):
             message=AskForCallbackRequestCommand,
             handler=AskForCallbackRequestCommandHandler(
                 callback_request_service=container[CallbackRequestService],
+            ),
+        )
+        container[CommandBus].register(
+            message=DeleteProductCommand,
+            handler=DeleteProductCommandHandler(
+                product_repository=container[ProductRepository],
+            ),
+        )
+        container[CommandBus].register(
+            message=SaveProductCommand,
+            handler=SaveProductCommandHandler(
+                product_service=container[ProductService],
             ),
         )

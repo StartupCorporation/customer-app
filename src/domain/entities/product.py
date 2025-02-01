@@ -1,9 +1,12 @@
 from dataclasses import dataclass
-from datetime import datetime
-from uuid import UUID
+from uuid import UUID, uuid4
 
 from domain.entities.base import Entity
-from domain.exception.product.invalid_image_link import InvalidImageLink
+from domain.exception.product.product_description_cant_be_empty import ProductDescriptionCantBeEmpty
+from domain.exception.product.product_image_cant_be_zero_length import ProductImageCantBeZeroLength
+from domain.exception.product.product_name_cant_be_empty import ProductNameCantBeEmpty
+from domain.exception.product.product_price_cant_be_less_or_equal_to_zero import ProductPriceCantBeLessOrEqualToZero
+from domain.exception.product.product_quantity_cant_be_negative import ProductQuantityCantBeNegative
 
 
 @dataclass(kw_only=True)
@@ -12,43 +15,113 @@ class Product(Entity[UUID]):
     description: str
     price: float
     quantity: int
-    characteristics: dict
     images: list[str]
     external_id: UUID
+    category_id: UUID
 
-    comments: list["Comment"]
+    @classmethod
+    def new(
+        cls,
+        name: str,
+        description: str,
+        price: float,
+        quantity: int,
+        images: list[str],
+        external_id: UUID,
+        category_id: UUID,
+    ) -> "Product":
+        return Product(
+            id=uuid4(),
+            name=name,
+            description=description,
+            price=price,
+            quantity=quantity,
+            images=images,
+            external_id=external_id,
+            category_id=category_id,
+        )
 
-    def add_new_image(
+    def __post_init__(self):
+        self._check_name(
+            name=self.name,
+        )
+        self._check_description(
+            description=self.description,
+        )
+        self._check_price(
+            price=self.price,
+        )
+        self._check_quantity(
+            quantity=self.quantity,
+        )
+        self._check_images(
+            images=self.images,
+        )
+
+    def set_name(
         self,
-        image_link: str,
+        name: str,
     ) -> None:
-        if not image_link:
-            raise InvalidImageLink(
-                "Image link cannot be zero-length",
-            )
+        self._check_name(name)
+        self.name = name
 
-        if image_link in self.images:
-            return
-
-        self.images.append(image_link)
-
-    def add_new_comment(
+    def set_description(
         self,
-        comment: "Comment",
+        description: str,
     ) -> None:
-        self.comments.append(comment)
+        self._check_description(
+            description=description,
+        )
+        self.description = description
 
-    def remove_comment(
+    def set_price(
         self,
-        comment: "Comment",
+        price: float,
     ) -> None:
-        self.comments.remove(comment)
+        self._check_price(
+            price=price,
+        )
+        self.price = price
 
+    def set_quantity(
+        self,
+        quantity: int,
+    ) -> None:
+        self._check_quantity(
+            quantity=quantity,
+        )
+        self.quantity = quantity
 
-@dataclass(kw_only=True)
-class Comment(Entity[UUID]):
-    author: str
-    content: str
-    created_at: datetime
+    def set_images(
+        self,
+        images: list[str],
+    ) -> None:
+        self._check_images(
+            images=images,
+        )
+        self.images= images
 
-    product_id: UUID
+    @staticmethod
+    def _check_images(images: list[str]) -> None:
+        if next(filter(lambda image: not len(image), images), None):
+            raise ProductImageCantBeZeroLength()
+
+    @staticmethod
+    def _check_name(name: str) -> None:
+        if not name:
+            raise ProductNameCantBeEmpty()
+
+    @staticmethod
+    def _check_description(description: str) -> None:
+        if not description:
+            raise ProductDescriptionCantBeEmpty()
+
+    @staticmethod
+    def _check_price(price: float) -> None:
+        if price <= 0:
+            raise ProductPriceCantBeLessOrEqualToZero()
+
+    @staticmethod
+    def _check_quantity(quantity: int) -> None:
+        if quantity < 0:
+            raise ProductQuantityCantBeNegative()

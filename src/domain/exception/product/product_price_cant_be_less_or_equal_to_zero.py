@@ -1,10 +1,10 @@
 from domain.exception.base import DomainException
 
 
-class InvalidImageLink(DomainException):
+class ProductPriceCantBeLessOrEqualToZero(DomainException):
 
     def __init__(
         self,
-        detail: str = 'Invalid image link',
+        detail: str = "Product price can't be less or equal to zero",
     ):
         super().__init__(detail=detail)

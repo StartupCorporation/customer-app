@@ -24,6 +24,7 @@ class GetCategoryProductsQueryHandler(QueryHandler[GetCategoryProductsQuery, Get
                 Product.id,
                 Product.name,
                 Product.images,
+                Product.price,
             ).where(
                 Product.category_id == query.category_id,
             )
@@ -34,5 +35,6 @@ class GetCategoryProductsQueryHandler(QueryHandler[GetCategoryProductsQuery, Get
                 id=result.id,
                 name=result.name,
                 images=result.images,
+                price=result.price,
             ) for result in results
         ]

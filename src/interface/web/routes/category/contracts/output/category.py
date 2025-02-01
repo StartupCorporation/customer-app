@@ -43,7 +43,14 @@ class CategoryProductOutputContract(OutputContract):
         UUID4,
         Field(
             description="The product `ID`.",
-            examples=[uuid4().hex],
+            examples=[str(uuid4())],
+        ),
+    ]
+    price: Annotated[
+        float,
+        Field(
+            description="The product price.",
+            examples=[50_000.55],
         ),
     ]
     name: Annotated[

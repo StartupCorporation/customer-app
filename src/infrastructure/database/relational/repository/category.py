@@ -15,17 +15,18 @@ class SQLAlchemyCategoryRepository(
 
     async def get_by_external_id(
         self,
-        id_: UUID,
+        external_id: UUID,
     ) -> Category | None:
-        stmt = select(Category).where(Category.external_id == id_)
+        stmt = select(Category).where(Category.external_id == external_id)  # type: ignore
         return await self._scalar(stmt)
 
     async def category_name_exists(
         self,
         name: str,
     ) -> bool:
-        stmt = select(exists().where(Category.name == name))
-        return await self._scalar(stmt)  # type: ignore
+        stmt = select(exists().where(Category.name == name))  # type: ignore
+        return await self._scalar(stmt)
+
 
     @cached_property
     def entity_class(self) -> type[Category]:

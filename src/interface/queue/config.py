@@ -7,6 +7,7 @@ class ConsumerSettings(BaseSettings):
     )
 
     CATEGORY_QUEUE: str
+    PRODUCT_QUEUE: str
 
 
 config = ConsumerSettings()  # type: ignore

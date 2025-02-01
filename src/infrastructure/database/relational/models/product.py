@@ -13,7 +13,6 @@ class Product(Base, IDMixin):
 
     name: Mapped[str] = mapped_column()
     description: Mapped[str] = mapped_column()
-    characteristics: Mapped[dict] = mapped_column()
     quantity: Mapped[int] = mapped_column()
     price: Mapped[float] = mapped_column()
     images: Mapped[list] = mapped_column()
