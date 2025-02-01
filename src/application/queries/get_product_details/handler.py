@@ -31,7 +31,6 @@ class GetProductDetailsQueryHandler(QueryHandler[GetProductDetailsQuery, GetProd
                 Product.description,
                 Product.quantity,
                 Product.price,
-                Product.characteristics,
                 Product.images,
             ).where(
                 Product.id == query.product_id,
@@ -58,7 +57,6 @@ class GetProductDetailsQueryHandler(QueryHandler[GetProductDetailsQuery, GetProd
             description=product.description,
             quantity=product.quantity,
             price=product.price,
-            characteristics=product.characteristics,
             images=product.images,
             comments=[
                 ProductDetailsComment(

@@ -7,7 +7,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from application.exception.base import NotFound
 from application.layer import ApplicationLayer
 from domain.exception.base import DomainException
-from domain.layer import DomainLayer
 from infrastructure.di.container import Container
 from infrastructure.di.utils import get_di_container
 from infrastructure.layer import InfrastructureLayer
@@ -98,7 +97,6 @@ web_app = WebApplication(
     container=get_di_container(
         layers=(
             InfrastructureLayer(),
-            DomainLayer(),
             ApplicationLayer(),
         ),
     ),

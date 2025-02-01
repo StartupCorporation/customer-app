@@ -2,6 +2,9 @@ from domain.event_bus.bus import ModelEventBus
 from domain.events.callback_request_asked import CallbackRequestAsked
 from domain.repository.category import CategoryRepository
 from domain.repository.product import ProductRepository
+from domain.service.callback_request import CallbackRequestService
+from domain.service.category import CategoryService
+from domain.service.product import ProductService
 from infrastructure.bus.command.bus import CommandBus
 from infrastructure.bus.event.bus import EventBus
 from infrastructure.bus.event.middleware.event_dispatcher import ModelEventDispatcherMiddleware
@@ -88,6 +91,17 @@ class InfrastructureLayer(Layer):
                 container[TransactionMiddleware],
                 container[ModelEventDispatcherMiddleware],
             ),
+        )
+
+        container[CallbackRequestService] = CallbackRequestService(
+            event_bus=container[ModelEventBus],
+        )
+        container[CategoryService] = CategoryService(
+            category_repository=container[CategoryRepository],
+        )
+        container[ProductService] = ProductService(
+            category_repository=container[CategoryRepository],
+            product_repository=container[ProductRepository],
         )
 
         container[DatabaseToEntityMapper] = DatabaseToEntityMapper()

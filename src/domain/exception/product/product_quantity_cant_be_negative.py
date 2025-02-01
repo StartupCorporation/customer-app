@@ -1,10 +1,10 @@
 from domain.exception.base import DomainException
 
 
-class CategoryImageCantBeZeroLength(DomainException):
+class ProductQuantityCantBeNegative(DomainException):
 
     def __init__(
         self,
-        detail: str = "Category image can't be zero-length",
+        detail: str = "Product price can't be negative",
     ):
         super().__init__(detail=detail)

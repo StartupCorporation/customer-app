@@ -43,18 +43,6 @@ class ProductOutputContract(OutputContract):
             examples=[3670.50],
         ),
     ]
-    characteristics: Annotated[
-        dict,
-        Field(
-            description="The object with product characteristics.",
-            examples=[{
-                "brand": "Bosch",
-                "type": "SLA",
-                "voltage": "12 V",
-                "amperage": "540 A",
-                "made in": "Germany",
-            }],
-        )]
     images: Annotated[
         list[str],
         Field(

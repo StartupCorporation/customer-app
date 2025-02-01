@@ -6,7 +6,6 @@ from faststream.rabbit import RabbitBroker
 
 from application.layer import ApplicationLayer
 from domain.exception.base import DomainException
-from domain.layer import DomainLayer
 from infrastructure.di.container import Container
 from infrastructure.di.utils import get_di_container
 from infrastructure.layer import InfrastructureLayer
@@ -60,6 +59,7 @@ class QueueApplication:
     @staticmethod
     def _domain_exception_handler(exc: DomainException) -> None:
         print(f'The domain exception has occurred. Details: "{str(exc)}"')  # noqa: T201
+        raise exc
 
     def __call__(self):
         return self._app
@@ -69,7 +69,6 @@ queue_app = QueueApplication(
     container=get_di_container(
         layers=(
             InfrastructureLayer(),
-            DomainLayer(),
             ApplicationLayer(),
         ),
     ),

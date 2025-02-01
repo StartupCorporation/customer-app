@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Any
 from functools import cached_property
 
 from sqlalchemy import select
@@ -48,7 +49,7 @@ class CRUDSQLAlchemyRepository[ID, ENTITY: Entity](
         async with self._connection_manager.session() as session:
             return (await session.scalars(*args, **kwargs)).unique().all()  # type: ignore
 
-    async def _scalar(self, *args, **kwargs) -> ENTITY | None:
+    async def _scalar(self, *args, **kwargs) -> Any:
         session: AsyncSession
 
         async with self._connection_manager.session() as session:

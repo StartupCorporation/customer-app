@@ -3,7 +3,6 @@ from typing import Iterable
 from typer import Typer, Context
 
 from application.layer import ApplicationLayer
-from domain.layer import DomainLayer
 from infrastructure.di.utils import get_di_container
 from infrastructure.layer import InfrastructureLayer
 from infrastructure.di.container import Container
@@ -59,7 +58,6 @@ if __name__ == "__main__":
         container=get_di_container(
             layers=(
                 InfrastructureLayer(),
-                DomainLayer(),
                 ApplicationLayer(),
             ),
         ),

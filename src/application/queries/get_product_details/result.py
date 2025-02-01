@@ -13,7 +13,6 @@ class ProductDetails(BaseModel):
     description: str
     quantity: int
     price: float
-    characteristics: dict
     images: list[str]
     comments: list["ProductDetailsComment"]
 
