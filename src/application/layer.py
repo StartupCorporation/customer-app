@@ -8,8 +8,8 @@ from application.commands.save_category.command import SaveCategoryCommand
 from application.commands.save_category.handler import SaveCategoryCommandHandler
 from application.commands.save_product.command import SaveProductCommand
 from application.commands.save_product.handler import SaveProductCommandHandler
-from application.queries.get_category_products.handler import GetCategoryProductsQueryHandler
-from application.queries.get_category_products.query import GetCategoryProductsQuery
+from application.queries.get_products.handler import GetProductsQueryHandler
+from application.queries.get_products.query import GetProductsQuery
 from application.queries.get_categories.handler import GetCategoriesQueryHandler
 from application.queries.get_categories.query import GetCategoriesQuery
 from application.queries.get_product_details.handler import GetProductDetailsQueryHandler
@@ -36,8 +36,8 @@ class ApplicationLayer(Layer):
             ),
         )
         container[QueryBus].register(
-            message=GetCategoryProductsQuery,
-            handler=GetCategoryProductsQueryHandler(
+            message=GetProductsQuery,
+            handler=GetProductsQueryHandler(
                 connection_manager=container[SQLDatabaseConnectionManager],
             ),
         )

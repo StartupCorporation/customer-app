@@ -7,7 +7,7 @@ from pydantic import Field, UUID4
 from interface.web.contracts import OutputContract
 
 
-class ProductOutputContract(OutputContract):
+class ProductDetailsOutputContract(OutputContract):
     id: Annotated[
         UUID4,
         Field(

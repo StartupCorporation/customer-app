@@ -13,6 +13,7 @@ from infrastructure.layer import InfrastructureLayer
 from infrastructure.settings.application import ApplicationSettings
 from interface.web.routes.callback_request.routes import router as callback_request_router
 from interface.web.routes.category.routes import router as category_router
+from interface.web.routes.product.routes import router as product_router
 
 
 class WebApplication:
@@ -102,6 +103,7 @@ web_app = WebApplication(
     ),
     routes=(
         category_router,
+        product_router,
         callback_request_router,
     ),
 )

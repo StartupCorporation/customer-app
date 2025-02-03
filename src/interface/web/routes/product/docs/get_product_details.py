@@ -1,10 +1,10 @@
-from interface.web.routes.category.contracts.output.product import ProductOutputContract
+from interface.web.routes.product.contracts.output.get_product_details import ProductDetailsOutputContract
 
 
-GET_PRODUCT_RESPONSES = {
+GET_PRODUCT_DETAILS_RESPONSES = {
     200: {
         'description': 'Product details are provided.',
-        'model': ProductOutputContract,
+        'model': ProductDetailsOutputContract,
     },
     404: {
         'description': "Product with provided `id` doesn't exist.",

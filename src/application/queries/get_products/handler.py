@@ -1,13 +1,13 @@
 from sqlalchemy import select
 
-from application.queries.get_category_products.query import GetCategoryProductsQuery
-from application.queries.get_category_products.result import GetCategoryProductsQueryResult, CategoryProduct
+from application.queries.get_products.query import GetProductsQuery
+from application.queries.get_products.result import GetProductsQueryResult, ProductShortInfo
 from infrastructure.bus.query.handler import QueryHandler
 from infrastructure.database.relational.connection import SQLDatabaseConnectionManager
 from infrastructure.database.relational.models.product import Product
 
 
-class GetCategoryProductsQueryHandler(QueryHandler[GetCategoryProductsQuery, GetCategoryProductsQueryResult]):
+class GetProductsQueryHandler(QueryHandler[GetProductsQuery, GetProductsQueryResult]):
 
     def __init__(
         self,
@@ -17,22 +17,22 @@ class GetCategoryProductsQueryHandler(QueryHandler[GetCategoryProductsQuery, Get
 
     async def __call__(
         self,
-        query: GetCategoryProductsQuery,
-    ) -> GetCategoryProductsQueryResult:
+        query: GetProductsQuery,  # noqa: ARG002
+    ) -> GetProductsQueryResult:
         async with self._connection_manager.session() as session:
             stmt = select(
                 Product.id,
+                Product.category_id,
                 Product.name,
                 Product.images,
                 Product.price,
-            ).where(
-                Product.category_id == query.category_id,
             )
             results = await session.execute(stmt)
 
         return [
-            CategoryProduct(
+            ProductShortInfo(
                 id=result.id,
+                category_id=result.category_id,
                 name=result.name,
                 images=result.images,
                 price=result.price,

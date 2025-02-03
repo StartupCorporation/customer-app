@@ -1,4 +1,4 @@
-from interface.web.routes.category.contracts.output.category import CategoryOutputContract
+from interface.web.routes.category.contracts.output.get_categories import CategoryOutputContract
 
 
 GET_CATEGORIES_RESPONSES = {
